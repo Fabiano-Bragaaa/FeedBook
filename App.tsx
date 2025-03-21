@@ -2,7 +2,7 @@ import {SafeAreaView} from 'react-native';
 
 import {ThemeProvider} from '@shopify/restyle';
 
-import {Text, Button} from '@components';
+import {Text, Button, Icon} from '@components';
 import {theme} from '@theme';
 
 function App(): React.JSX.Element {
@@ -11,6 +11,7 @@ function App(): React.JSX.Element {
       <SafeAreaView style={{padding: 20}}>
         <Text preset="headingLarge">Ola</Text>
         <Button title="entrar" disabled />
+        <Icon name="bookmark" />
       </SafeAreaView>
     </ThemeProvider>
   );
