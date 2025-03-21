@@ -1,9 +1,5 @@
-import {View, Text as RNText} from 'react-native';
+import {Text as RNText, TextProps} from 'react-native';
 
-export function Text() {
-  return (
-    <View>
-      <RNText>Ola</RNText>
-    </View>
-  );
+export function Text({children, ...rest}: TextProps) {
+  return <RNText {...rest}>{children}</RNText>;
 }
