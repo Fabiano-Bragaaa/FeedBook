@@ -2,7 +2,7 @@ import {SafeAreaView} from 'react-native';
 
 import {ThemeProvider} from '@shopify/restyle';
 
-import {Text, Button, Icon} from '@components';
+import {Text, Button, Icon, TextInput} from '@components';
 import {theme} from '@theme';
 
 function App(): React.JSX.Element {
@@ -12,6 +12,11 @@ function App(): React.JSX.Element {
         <Text preset="headingLarge">Ola</Text>
         <Button title="entrar" disabled />
         <Icon name="bookmark" />
+        <TextInput
+          label="E-mail"
+          errorMessage="erro"
+          rightComponent={<Icon name={'eyeOn'} />}
+        />
       </SafeAreaView>
     </ThemeProvider>
   );
