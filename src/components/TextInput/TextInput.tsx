@@ -39,7 +39,7 @@ export function TextInput({
     borderWidth: errorMessage ? 2 : 1,
     borderColor: errorMessage ? 'error' : 'gray4',
     borderRadius: 's12',
-    p: 's14',
+    p: 's12',
   };
 
   return (

@@ -4,3 +4,4 @@ export * from './Button/Button';
 export * from './Box/Box';
 export * from './Icon/Icon';
 export * from './TextInput/TextInput';
+export * from './Screen/Screen';
