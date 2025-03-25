@@ -21,10 +21,10 @@ export const palette = {
 export const theme = createTheme({
   colors: {
     ...palette,
-    primary: palette.greenPrimary,
+    primary: palette.carrotSecondary,
     primaryContranst: palette.grayWhite,
 
-    buttonPrimary: palette.greenPrimary,
+    buttonPrimary: palette.carrotSecondary,
 
     background: palette.grayWhite,
     backgroundContranst: palette.grayBlack,

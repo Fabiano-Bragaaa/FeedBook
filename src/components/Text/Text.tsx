@@ -27,7 +27,10 @@ export function Text({
 }: TextProps) {
   const fontFamily = getFontFamily(preset, bold, italic, semiBold);
   return (
-    <SRText {...textProps} style={[$fontSizes[preset], {fontFamily}, style]}>
+    <SRText
+      color="backgroundContranst"
+      style={[$fontSizes[preset], {fontFamily}, style]}
+      {...textProps}>
       {children}
     </SRText>
   );

@@ -63,7 +63,11 @@ export function Icon({
     );
   }
 
-  return <SVGIcon color={colors[color]} size={size} />;
+  return (
+    <Pressable hitSlop={10} onPress={onPress}>
+      <SVGIcon color={colors[color]} size={size} />
+    </Pressable>
+  );
 }
 
 const iconRegistry = {

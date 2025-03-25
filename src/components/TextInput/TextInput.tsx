@@ -11,7 +11,7 @@ import {useAppTheme} from '@hooks';
 
 import {$fontFamily, $fontSizes, Text} from '../Text/Text';
 
-type TextInputProps = RNTextInputProps & {
+export type TextInputProps = RNTextInputProps & {
   label: string;
   errorMessage?: string;
   rightComponent?: ReactNode;
@@ -46,7 +46,7 @@ export function TextInput({
     <Box {...boxProps}>
       <Pressable onPress={focusInput}>
         <Box>
-          <Text mb="s4" preset="paragraphMedium" bold>
+          <Text mb="s4" preset="paragraphMedium" semiBold>
             {label}
           </Text>
           <Box {...$textInputContainer}>
