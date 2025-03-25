@@ -7,6 +7,7 @@ import {RootStackParamList} from '@routes';
 type ScreenProps = NativeStackScreenProps<RootStackParamList, 'SignUp'>;
 
 export function SignUp({navigation}: ScreenProps) {
+  const asd;
   const {reset} = useResetNavigationSuccess();
   function submitForm() {
     reset({
