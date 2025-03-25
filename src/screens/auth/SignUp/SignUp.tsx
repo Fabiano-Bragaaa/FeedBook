@@ -33,15 +33,15 @@ export function SignUp({navigation}: ScreenProps) {
   function submitForm(props: TypeSignUpSchema) {
     console.log(props);
 
-    // reset({
-    //   title: 'Sua conta foi criada com sucesso!',
-    //   description: 'Agora é só fazer login na nossa plataforma',
-    //   icon: {
-    //     name: 'checkRound',
-    //     size: 60,
-    //     color: 'success',
-    //   },
-    // });
+    reset({
+      title: 'Sua conta foi criada com sucesso!',
+      description: 'Agora é só fazer login na nossa plataforma',
+      icon: {
+        name: 'checkRound',
+        size: 60,
+        color: 'success',
+      },
+    });
   }
 
   return (
