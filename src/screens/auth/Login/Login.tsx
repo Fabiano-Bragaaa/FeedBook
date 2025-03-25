@@ -1,8 +1,17 @@
-import {Button, PasswordInput, Screen, Text, TextInput} from '@components';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-export function Login() {
+import {Button, PasswordInput, Screen, Text, TextInput} from '@components';
+import {RootStackParamList} from '@routes';
+
+type ScreenProps = NativeStackScreenProps<RootStackParamList, 'Login'>;
+
+export function Login({navigation}: ScreenProps) {
   function navigateToForgetMyPassword() {
-    //TODO
+    navigation.navigate('ForgetPassword');
+  }
+
+  function navigateToLogin() {
+    navigation.navigate('SignUp');
   }
 
   return (
@@ -30,7 +39,12 @@ export function Login() {
         Esqueci minha senha
       </Text>
       <Button title="Entrar" mt="s48" />
-      <Button title="Criar uma conta" mt="s14" preset="outline" />
+      <Button
+        title="Criar uma conta"
+        mt="s14"
+        preset="outline"
+        onPress={navigateToLogin}
+      />
     </Screen>
   );
 }
