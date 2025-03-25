@@ -5,6 +5,7 @@ module.exports = {
   rules: {
     '@typescript-eslint/no-unused-vars': 1,
     'react/react-in-jsx-scope': 'off',
+    'react-native/no-inline-styles': 0,
   },
   overrides: [
     {

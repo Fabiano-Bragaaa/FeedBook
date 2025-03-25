@@ -2,7 +2,6 @@ import {ThemeProvider} from '@shopify/restyle';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 import {Router} from '@routes';
-import {Login, SignUp} from '@screens';
 import {theme} from '@theme';
 
 function App(): React.JSX.Element {
