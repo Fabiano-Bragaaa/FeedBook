@@ -36,7 +36,7 @@ export function Screen({
           {canGoBack && (
             <Pressable onPress={goBack}>
               <Box mb="s24" flexDirection="row" alignItems="center">
-                <Icon name="arrowLeft" color="primary" />
+                <Icon name="arrowLeft" color="primary" onPress={goBack} />
                 <Text preset="paragraphMedium" semiBold ml="s8">
                   Voltar
                 </Text>
