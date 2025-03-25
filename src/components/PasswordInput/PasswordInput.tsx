@@ -1,5 +1,4 @@
 import {useState} from 'react';
-import {Pressable} from 'react-native';
 
 import {Icon, TextInput, TextInputProps} from '@components';
 
