@@ -9,7 +9,7 @@ const SRText = createText<Theme>();
 
 type SRTextProps = ComponentProps<typeof SRText>;
 
-type TextProps = SRTextProps & {
+export type TextProps = SRTextProps & {
   preset?: TextVariants;
   bold?: boolean;
   italic?: boolean;
