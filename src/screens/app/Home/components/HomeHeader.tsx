@@ -6,7 +6,7 @@ import {HomeSlider} from './HomeSlide';
 export function HomeHeader() {
   const {top} = useAppSafeArea();
   return (
-    <Box style={{paddingTop: top}}>
+    <Box mb="s32" style={{paddingTop: top}}>
       <Box {...$wrapper}>
         <Box flexDirection="row">
           <Text preset="paragraphLarge">Olá, </Text>
