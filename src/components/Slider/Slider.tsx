@@ -23,10 +23,10 @@ export function Slider({bg, title}: SliderProps) {
 
   return (
     <Box {...$wrapper}>
-      <Text preset="headingSmall" color="gray5">
+      <Text preset="headingSmall" color="background">
         {title}
       </Text>
-      <Text preset="headingMedium" color="grayWhite">
+      <Text preset="headingMedium" color="background">
         ola
       </Text>
     </Box>

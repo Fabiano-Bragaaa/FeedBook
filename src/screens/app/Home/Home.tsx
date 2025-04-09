@@ -3,7 +3,7 @@ import {FlatList, ListRenderItemInfo, StyleProp, ViewStyle} from 'react-native';
 
 import {CashFlow, cashFlowService} from '@domain';
 
-import {Box, Screen, Text} from '@components';
+import { CashList, Screen } from '@components';
 import {AppTabScreenProps} from '@routes';
 
 import {HomeHeader} from './components/HomeHeader';
@@ -14,13 +14,8 @@ export function Home({navigation}: AppTabScreenProps<'Home'>) {
   useEffect(() => {
     cashFlowService.getList().then(cash => setCashList(cash));
   }, []);
-
   function renderItem({item}: ListRenderItemInfo<CashFlow>) {
-    return (
-      <Box>
-        <Text>{item.text}</Text>
-      </Box>
-    );
+    return <CashList item={item} />;
   }
 
   return (
@@ -29,7 +24,8 @@ export function Home({navigation}: AppTabScreenProps<'Home'>) {
         data={cashList}
         keyExtractor={item => item.id}
         renderItem={renderItem}
-        ListHeaderComponent={<HomeHeader/>}
+        showsVerticalScrollIndicator={false}
+        ListHeaderComponent={<HomeHeader />}
       />
     </Screen>
   );

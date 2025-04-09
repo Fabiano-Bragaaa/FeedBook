@@ -1,14 +1,13 @@
-import {useRef, useState} from 'react';
-import {Dimensions, View} from 'react-native';
+import {useRef} from 'react';
+import {Dimensions} from 'react-native';
 
 import Carousel, {ICarouselInstance} from 'react-native-reanimated-carousel';
 
-import {Slider, SliderProps, Text} from '@components'; // Considerando que você tenha o Text no @components
-
+import {Slider, SliderProps} from '@components';
 const {width} = Dimensions.get('window');
 
 const sliderData: SliderProps[] = [
-  {bg: 'primary', title: 'Saldo Atual'},
+  {bg: 'backgroundContranst', title: 'Saldo Atual'},
   {bg: 'greenSuccess', title: 'Receitas'},
   {bg: 'redError', title: 'Despesas'},
 ];
