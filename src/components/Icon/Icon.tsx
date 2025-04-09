@@ -28,6 +28,7 @@ import {HomeIcon} from '../../assets/icons/HomeIcon';
 import {MessageIcon} from '../../assets/icons/MessageIcon';
 import {MessageRoundIcon} from '../../assets/icons/messageRoundIcon';
 import {NewPostIcon} from '../../assets/icons/NewPostIcon';
+import {PencilIcon} from '../../assets/icons/PencilIcon';
 import {ProfileFillIcon} from '../../assets/icons/ProfileFillIcon';
 import {ProfileIcon} from '../../assets/icons/ProfileIcon';
 import {SearchIcon} from '../../assets/icons/SearchIcon';
@@ -95,6 +96,7 @@ const iconRegistry = {
   message: MessageIcon,
   messageRound: MessageRoundIcon,
   newPost: NewPostIcon,
+  pencil: PencilIcon,
   profile: ProfileIcon,
   profileFill: ProfileFillIcon,
   errorRound: ErrorRoundIcon,
