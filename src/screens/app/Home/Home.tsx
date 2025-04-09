@@ -21,7 +21,16 @@ export function Home({navigation}: AppTabScreenProps<'Home'>) {
     cashFlowService.getList().then(cash => setCashList(cash));
   }, []);
 
-  function onSwipeableOpen(current: SwipeableMethods | null) {
+  function onSwipeableOpen(
+    direction: 'left' | 'right',
+    current: SwipeableMethods | null,
+  ) {
+    console.log(direction);
+
+    if (direction === 'right') {
+      console.log('deletado');
+    }
+
     if (swipeableRef.current) {
       swipeableRef.current.close();
     }
@@ -37,17 +46,28 @@ export function Home({navigation}: AppTabScreenProps<'Home'>) {
         containerStyle={{
           backgroundColor: colors.background,
         }}
+        overshootRight={false}
         overshootLeft={false}
         friction={2}
-        leftThreshold={30}
-        onSwipeableOpen={() => onSwipeableOpen(current)}
+        rightThreshold={100}
+        leftThreshold={100}
+        onSwipeableOpen={direction => onSwipeableOpen(direction, current)}
         renderLeftActions={() => (
-          <Box flexDirection="row">
+          <Box bg="redError" flex={1} height={50} borderRadius="s12">
+            <Option icon={{name: 'trash', color: 'background'}} bg="redError" />
+          </Box>
+        )}
+        renderRightActions={() => (
+          <Box
+            bg="greenSuccess"
+            flex={1}
+            height={50}
+            alignItems="flex-end"
+            borderRadius="s12">
             <Option
               icon={{name: 'pencil', color: 'background'}}
               bg="greenSuccess"
             />
-            <Option icon={{name: 'trash', color: 'background'}} bg="redError" />
           </Box>
         )}>
         <CashList item={item} />
