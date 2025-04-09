@@ -7,7 +7,7 @@ import {Slider, SliderProps} from '@components';
 const {width} = Dimensions.get('window');
 
 const sliderData: SliderProps[] = [
-  {bg: 'backgroundContranst', title: 'Saldo Atual'},
+  {bg: 'primary', title: 'Saldo Atual'},
   {bg: 'greenSuccess', title: 'Receitas'},
   {bg: 'redError', title: 'Despesas'},
 ];

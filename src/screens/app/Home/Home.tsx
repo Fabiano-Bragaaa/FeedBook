@@ -49,8 +49,8 @@ export function Home({navigation}: AppTabScreenProps<'Home'>) {
         overshootRight={false}
         overshootLeft={false}
         friction={2}
-        rightThreshold={100}
-        leftThreshold={100}
+        rightThreshold={70}
+        leftThreshold={70}
         onSwipeableOpen={direction => onSwipeableOpen(direction, current)}
         renderLeftActions={() => (
           <Box bg="redError" flex={1} height={50} borderRadius="s12">
