@@ -1,5 +1,7 @@
 export type CashFlow = {
   id: string;
-  text: number;
-  type: 'expense' | 'income';
+  type: 'income' | 'expense';
+  description: string;
+  amount: number;
+  date: Date;
 };

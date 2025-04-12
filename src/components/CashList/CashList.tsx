@@ -18,7 +18,7 @@ export function CashList({item}: Props) {
       <Box {...$line} />
 
       <Box {...$boxText}>
-        <Text preset="headingSmall">{item.text}</Text>
+        <Text preset="headingSmall">{item.amount}</Text>
       </Box>
     </Box>
   );
