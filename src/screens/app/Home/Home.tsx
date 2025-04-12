@@ -1,7 +1,6 @@
-import {useEffect, useRef, useState} from 'react';
 import {FlatList, ListRenderItemInfo, StyleProp, ViewStyle} from 'react-native';
 
-import {CashFlow, cashFlowService} from '@domain';
+import {CashFlow, useCashFlowList} from '@domain';
 import Swipeable, {
   SwipeableMethods,
 } from 'react-native-gesture-handler/ReanimatedSwipeable';
@@ -13,30 +12,8 @@ import {AppTabScreenProps} from '@routes';
 import {HomeHeader} from './components/HomeHeader';
 
 export function Home({navigation}: AppTabScreenProps<'Home'>) {
-  const swipeableRef = useRef<SwipeableMethods | null>(null);
+  const {cashList, onSwipeableOpen} = useCashFlowList();
   const {colors} = useAppTheme();
-  const [cashList, setCashList] = useState<CashFlow[]>([]);
-
-  useEffect(() => {
-    cashFlowService.getList().then(cash => setCashList(cash));
-  }, []);
-
-  function onSwipeableOpen(
-    direction: 'left' | 'right',
-    current: SwipeableMethods | null,
-  ) {
-    console.log(direction);
-
-    if (direction === 'right') {
-      console.log('deletado');
-    }
-
-    if (swipeableRef.current) {
-      swipeableRef.current.close();
-    }
-
-    swipeableRef.current = current;
-  }
 
   function renderItem({item}: ListRenderItemInfo<CashFlow>) {
     let current: SwipeableMethods | null = null;
