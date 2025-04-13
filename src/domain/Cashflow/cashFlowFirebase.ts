@@ -1,4 +1,4 @@
-import {auth, db} from '@services';
+import { db} from '@services';
 import {
   addDoc,
   collection,
