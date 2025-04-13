@@ -1,8 +1,18 @@
+import {DocumentData, QueryDocumentSnapshot} from 'firebase/firestore';
+
 import {cashFlowFirebase} from './cashFlowFirebase';
 import {CashFlow} from './cashFlowTypes';
 
-async function getList(): Promise<CashFlow[]> {
-  const cashFlowList = await cashFlowFirebase.getList();
+const PAGE_LIMIT = 10;
+
+async function getList(
+  lastVisible?: QueryDocumentSnapshot<DocumentData>,
+): Promise<{
+  data: CashFlow[];
+  lastVisible?: QueryDocumentSnapshot<DocumentData>;
+  hasNextPage: boolean;
+}> {
+  const cashFlowList = await cashFlowFirebase.getList(PAGE_LIMIT, lastVisible);
 
   return cashFlowList;
 }
