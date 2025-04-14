@@ -22,7 +22,7 @@ async function getList(
   hasNextPage: boolean;
 }> {
   const transactionsQuery = query(
-    collection(db, 'Transactions'),
+    collection(db, 'transactions'),
     orderBy('date', 'desc'),
     limit(pageLimit),
     ...(lastVisible ? [startAfter(lastVisible)] : []),
@@ -48,7 +48,7 @@ async function getList(
 async function createTransactions(
   cashFlow: Omit<CashFlow, 'id'>,
 ): Promise<CashFlow> {
-  const docRef = await addDoc(collection(db, 'Transactions'), {
+  const docRef = await addDoc(collection(db, 'transactions'), {
     ...cashFlow,
     date: cashFlow.date ?? new Date(),
   });

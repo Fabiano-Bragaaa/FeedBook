@@ -1,5 +1,6 @@
 import {useState} from 'react';
 
+import {cashFlowService} from '@domain';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {useForm} from 'react-hook-form';
 
@@ -10,10 +11,10 @@ import {NewSchema, TypeNewSchema} from './NewSchema';
 
 export function New({navigation}: AppTabScreenProps<'New'>) {
   const [selectedType, setSelectedType] = useState<'expense' | 'income'>(
-    'expense',
+    'income',
   );
 
-  const {control, formState, handleSubmit} = useForm<TypeNewSchema>({
+  const {control, formState, handleSubmit, reset} = useForm<TypeNewSchema>({
     resolver: zodResolver(NewSchema),
     defaultValues: {
       amount: 0,
@@ -22,8 +23,20 @@ export function New({navigation}: AppTabScreenProps<'New'>) {
     mode: 'onChange',
   });
 
-  function submitForm(props: TypeNewSchema) {
-    console.log(props);
+  async function submitForm({amount, description}: TypeNewSchema) {
+    try {
+      await cashFlowService.create({
+        amount,
+        date: new Date(),
+        description,
+        type: selectedType,
+      });
+      console.log('cadastro feito');
+      reset();
+      setSelectedType('income');
+    } catch (err) {
+      console.log('erro ao cadastrar', err);
+    }
   }
 
   return (

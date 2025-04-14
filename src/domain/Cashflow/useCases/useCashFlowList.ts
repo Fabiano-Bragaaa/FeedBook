@@ -1,5 +1,6 @@
-import {useEffect, useRef, useState} from 'react';
+import {useCallback, useRef, useState} from 'react';
 
+import {useFocusEffect} from '@react-navigation/native';
 import {DocumentData, QueryDocumentSnapshot} from 'firebase/firestore';
 import {SwipeableMethods} from 'react-native-gesture-handler/lib/typescript/components/ReanimatedSwipeable';
 
@@ -50,9 +51,11 @@ export function useCashFlowList() {
     }
   }
 
-  useEffect(() => {
-    fetchInitialData();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchInitialData();
+    }, []),
+  );
 
   function onSwipeableOpen(
     direction: 'left' | 'right',

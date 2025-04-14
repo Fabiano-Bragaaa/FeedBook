@@ -1,4 +1,5 @@
 import {CashFlow} from '@domain';
+import {formatCurrency} from '@utils';
 
 import {
   Box,
@@ -27,7 +28,7 @@ export function CashList({item, ...touchableOpacityBoxProps}: Props) {
       <Box {...$line} />
 
       <Box {...$boxText}>
-        <Text preset="headingSmall">{item.amount}</Text>
+        <Text preset="headingSmall">{formatCurrency(item.amount)}</Text>
       </Box>
     </TouchableOpacityBox>
   );
