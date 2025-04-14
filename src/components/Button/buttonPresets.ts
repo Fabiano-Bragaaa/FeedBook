@@ -43,4 +43,20 @@ export const buttonPresets: Record<
       content: 'gray2',
     },
   },
+  noSelected: {
+    default: {
+      container: {
+        borderWidth: 1,
+        borderColor: 'gray2',
+      },
+      content: 'gray2',
+    },
+    disabled: {
+      container: {
+        borderWidth: 1,
+        borderColor: 'gray4',
+      },
+      content: 'gray2',
+    },
+  },
 };

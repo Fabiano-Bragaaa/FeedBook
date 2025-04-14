@@ -1,3 +1,5 @@
+import {useState} from 'react';
+
 import {zodResolver} from '@hookform/resolvers/zod';
 import {useForm} from 'react-hook-form';
 
@@ -7,6 +9,10 @@ import {AppTabScreenProps} from '@routes';
 import {NewSchema, TypeNewSchema} from './NewSchema';
 
 export function New({navigation}: AppTabScreenProps<'New'>) {
+  const [selectedType, setSelectedType] = useState<'expense' | 'income'>(
+    'expense',
+  );
+
   const {control, formState, handleSubmit} = useForm<TypeNewSchema>({
     resolver: zodResolver(NewSchema),
     defaultValues: {
@@ -21,7 +27,7 @@ export function New({navigation}: AppTabScreenProps<'New'>) {
   }
 
   return (
-    <Screen>
+    <Screen scrollable>
       <Text preset="headingMedium" mb="s32">
         Registre suas movimentações
       </Text>
@@ -48,12 +54,28 @@ export function New({navigation}: AppTabScreenProps<'New'>) {
       />
 
       <Box flexDirection="row">
-        <Button title="Receita" preset="outline" flex={1} mr="s8" />
-        <Button title="Despesa" preset="outline" flex={1} mb="s56" />
+        <Button
+          title="Receita"
+          preset="noSelected"
+          flex={1}
+          mr="s8"
+          selected={selectedType === 'income'}
+          selectedColor="success"
+          onPress={() => setSelectedType('income')}
+        />
+        <Button
+          title="Despesa"
+          preset="noSelected"
+          flex={1}
+          mb="s48"
+          selected={selectedType === 'expense'}
+          selectedColor="redError"
+          onPress={() => setSelectedType('expense')}
+        />
       </Box>
 
       <Button
-        title="Ir para settings"
+        title="Registre"
         mt="s10"
         disabled={!formState.isValid}
         onPress={handleSubmit(submitForm)}
