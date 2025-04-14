@@ -1,12 +1,18 @@
 import {CashFlow} from '@domain';
 
-import {Box, BoxProps, Text} from '@components';
+import {
+  Box,
+  BoxProps,
+  Text,
+  TouchableOpacityBox,
+  TouchableOpacityBoxProps,
+} from '@components';
 
-type Props = {
+type Props = TouchableOpacityBoxProps & {
   item: CashFlow;
 };
 
-export function CashList({item}: Props) {
+export function CashList({item, ...touchableOpacityBoxProps}: Props) {
   const $line: BoxProps = {
     width: 6,
     height: '100%',
@@ -14,13 +20,16 @@ export function CashList({item}: Props) {
   };
 
   return (
-    <Box {...$wrapper}>
+    <TouchableOpacityBox
+      activeOpacity={0.7}
+      {...$wrapper}
+      {...touchableOpacityBoxProps}>
       <Box {...$line} />
 
       <Box {...$boxText}>
         <Text preset="headingSmall">{item.amount}</Text>
       </Box>
-    </Box>
+    </TouchableOpacityBox>
   );
 }
 

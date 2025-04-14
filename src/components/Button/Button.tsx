@@ -30,7 +30,9 @@ export function Button({
 }: ButtonProps) {
   const buttonPreset = buttonPresets[preset][disabled ? 'disabled' : 'default'];
   const $selectedOutline: TouchableOpacityBoxProps =
-    preset === 'noSelected' && selected && !disabled ? {bg: selectedColor} : {};
+    preset === 'noSelected' && selected && !disabled
+      ? {bg: selectedColor, borderWidth: 0}
+      : {};
 
   const $selectedTextColor: themeColor | undefined =
     preset === 'noSelected' && selected && !disabled ? 'background' : undefined;
