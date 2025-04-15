@@ -1,4 +1,5 @@
-import { db} from '@services';
+import {db} from '@services';
+import {startOfDay, endOfDay} from 'date-fns';
 import {
   addDoc,
   collection,
@@ -9,6 +10,7 @@ import {
   query,
   QueryDocumentSnapshot,
   startAfter,
+  where,
 } from 'firebase/firestore';
 
 import {CashFlow} from './cashFlowTypes';
@@ -16,13 +18,18 @@ import {CashFlow} from './cashFlowTypes';
 async function getList(
   pageLimit: number,
   lastVisible?: QueryDocumentSnapshot<DocumentData>,
+  date?: Date,
 ): Promise<{
   data: CashFlow[];
   lastVisible?: QueryDocumentSnapshot<DocumentData>;
   hasNextPage: boolean;
 }> {
+  const targetDate = date ?? new Date();
+
   const transactionsQuery = query(
     collection(db, 'transactions'),
+    where('date', '>=', startOfDay(targetDate)),
+    where('date', '<=', endOfDay(targetDate)),
     orderBy('date', 'desc'),
     limit(pageLimit),
     ...(lastVisible ? [startAfter(lastVisible)] : []),
@@ -59,7 +66,54 @@ async function createTransactions(
     date: cashFlow.date ?? new Date(),
   };
 }
+
+async function getTotalExpenses(date?: Date): Promise<number> {
+  const targetDate = date ?? new Date();
+
+  const queryExpenses = query(
+    collection(db, 'transactions'),
+    where('type', '==', 'expense'),
+    where('date', '>=', startOfDay(targetDate)),
+    where('date', '<=', endOfDay(targetDate)),
+  );
+
+  const querySnapshot = await getDocs(queryExpenses);
+
+  const total = querySnapshot.docs.reduce((sum, doc) => {
+    console.log('summ', sum);
+
+    const amount = doc.data().amount || 0;
+    return sum + amount;
+  }, 0);
+
+  return total;
+}
+
+async function getTotalIncome(date?: Date): Promise<number> {
+  const targetDate = date ?? new Date();
+
+  const queryIncome = query(
+    collection(db, 'transactions'),
+    where('type', '==', 'income'),
+    where('date', '>=', startOfDay(targetDate)),
+    where('date', '<=', endOfDay(targetDate)),
+  );
+
+  const querySnapshot = await getDocs(queryIncome);
+
+  const total = querySnapshot.docs.reduce((sum, doc) => {
+    console.log('summ', sum);
+
+    const amount = doc.data().amount || 0;
+    return sum + amount;
+  }, 0);
+
+  return total;
+}
+
 export const cashFlowFirebase = {
   getList,
   createTransactions,
+  getTotalExpenses,
+  getTotalIncome,
 };
