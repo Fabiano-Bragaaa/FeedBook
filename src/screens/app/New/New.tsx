@@ -13,6 +13,7 @@ export function New({navigation}: AppTabScreenProps<'New'>) {
   const [selectedType, setSelectedType] = useState<'expense' | 'income'>(
     'income',
   );
+  const [loading, setLoading] = useState(false);
 
   const {control, formState, handleSubmit, reset} = useForm<TypeNewSchema>({
     resolver: zodResolver(NewSchema),
@@ -25,6 +26,7 @@ export function New({navigation}: AppTabScreenProps<'New'>) {
 
   async function submitForm({amount, description}: TypeNewSchema) {
     try {
+      setLoading(true);
       await cashFlowService.create({
         amount,
         date: new Date(),
@@ -36,6 +38,8 @@ export function New({navigation}: AppTabScreenProps<'New'>) {
       setSelectedType('income');
     } catch (err) {
       console.log('erro ao cadastrar', err);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -92,6 +96,7 @@ export function New({navigation}: AppTabScreenProps<'New'>) {
         mt="s10"
         disabled={!formState.isValid}
         onPress={handleSubmit(submitForm)}
+        loading={loading}
       />
     </Screen>
   );

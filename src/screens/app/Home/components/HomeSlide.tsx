@@ -1,19 +1,21 @@
 import {useRef} from 'react';
 import {Dimensions} from 'react-native';
 
+import {useCashFlowCardHeader} from '@domain';
 import Carousel, {ICarouselInstance} from 'react-native-reanimated-carousel';
 
 import {Slider, SliderProps} from '@components';
 const {width} = Dimensions.get('window');
 
-const sliderData: SliderProps[] = [
-  {bg: 'primary', title: 'Saldo Atual'},
-  {bg: 'greenSuccess', title: 'Receitas'},
-  {bg: 'redError', title: 'Despesas'},
-];
-
 export function HomeSlider() {
   const ref = useRef<ICarouselInstance>(null);
+  const {balance, expense, income} = useCashFlowCardHeader();
+
+  const sliderData: SliderProps[] = [
+    {bg: 'primary', title: 'Saldo Atual', amount: balance},
+    {bg: 'greenSuccess', title: 'Receitas', amount: income},
+    {bg: 'redError', title: 'Despesas', amount: expense},
+  ];
 
   return (
     <Carousel

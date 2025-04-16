@@ -1,4 +1,4 @@
-import {cleanCurrency, formatCurrency} from '@utils';
+import {formatCurrency, parseCurrencyInput} from '@utils';
 import {Controller, FieldValues, UseControllerProps} from 'react-hook-form';
 
 import {TextInput, TextInputProps} from '@components';
@@ -19,12 +19,12 @@ export function FormTextInput<FormType extends FieldValues>({
       name={name}
       render={({field: {value, onChange}, fieldState: {error}}) => (
         <TextInput
-          value={isMoney ? formatCurrency(value || '') : value}
+          value={isMoney ? formatCurrency(value || 0) : value}
           onChangeText={
             isMoney
               ? text => {
-                  const cleanValue = cleanCurrency(text);
-                  onChange(cleanValue);
+                  const parsed = parseCurrencyInput(text);
+                  onChange(parsed);
                 }
               : onChange
           }

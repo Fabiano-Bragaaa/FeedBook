@@ -18,6 +18,8 @@ export function useCashFlowList() {
   const swipeableRef = useRef<SwipeableMethods | null>(null);
 
   async function fetchInitialData() {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
     try {
       setLoading(true);
       setError(false);

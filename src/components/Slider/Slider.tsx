@@ -1,5 +1,7 @@
 import {Dimensions} from 'react-native';
 
+import {formatCurrency} from '@utils';
+
 import {Box, BoxProps, Text} from '@components';
 import {themeColor} from '@theme';
 
@@ -8,9 +10,10 @@ const {width} = Dimensions.get('window');
 export type SliderProps = {
   bg: themeColor;
   title: string;
+  amount: number;
 };
 
-export function Slider({bg, title}: SliderProps) {
+export function Slider({bg, title, amount}: SliderProps) {
   const $wrapper: BoxProps = {
     height: 140,
     bg,
@@ -27,7 +30,7 @@ export function Slider({bg, title}: SliderProps) {
         {title}
       </Text>
       <Text preset="headingMedium" color="background">
-        ola
+        {formatCurrency(amount)}
       </Text>
     </Box>
   );
