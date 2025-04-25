@@ -3,6 +3,8 @@ import {startOfDay, endOfDay} from 'date-fns';
 import {
   addDoc,
   collection,
+  deleteDoc,
+  doc,
   DocumentData,
   getDocs,
   limit,
@@ -52,9 +54,7 @@ async function getList(
   };
 }
 
-async function createTransactions(
-  cashFlow: Omit<CashFlow, 'id'>,
-): Promise<CashFlow> {
+async function create(cashFlow: Omit<CashFlow, 'id'>): Promise<CashFlow> {
   const docRef = await addDoc(collection(db, 'transactions'), {
     ...cashFlow,
     date: cashFlow.date ?? new Date(),
@@ -65,6 +65,11 @@ async function createTransactions(
     ...cashFlow,
     date: cashFlow.date ?? new Date(),
   };
+}
+
+async function remove(id: string): Promise<void> {
+  const docRef = doc(db, 'transactions', id);
+  await deleteDoc(docRef);
 }
 
 async function getTotalExpenses(date?: Date): Promise<number> {
@@ -102,8 +107,6 @@ async function getTotalIncome(date?: Date): Promise<number> {
   const querySnapshot = await getDocs(queryIncome);
 
   const total = querySnapshot.docs.reduce((sum, doc) => {
-    console.log('summ', sum);
-
     const amount = doc.data().amount || 0;
     return sum + amount;
   }, 0);
@@ -113,7 +116,8 @@ async function getTotalIncome(date?: Date): Promise<number> {
 
 export const cashFlowFirebase = {
   getList,
-  createTransactions,
+  create,
+  remove,
   getTotalExpenses,
   getTotalIncome,
 };

@@ -41,7 +41,9 @@ export function Home({navigation}: AppTabScreenProps<'Home'>) {
         friction={2}
         rightThreshold={70}
         leftThreshold={70}
-        onSwipeableOpen={direction => onSwipeableOpen(direction, current)}
+        onSwipeableOpen={direction =>
+          onSwipeableOpen(direction, current, item.id)
+        }
         renderLeftActions={() => (
           <Box bg="redError" flex={1} height={50} borderRadius="s12">
             <Option icon={{name: 'trash', color: 'background'}} bg="redError" />

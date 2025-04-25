@@ -59,13 +59,16 @@ export function useCashFlowList() {
     }, []),
   );
 
-  function onSwipeableOpen(
+  async function onSwipeableOpen(
     direction: 'left' | 'right',
     current: SwipeableMethods | null,
+    id: string,
   ) {
     console.log(direction);
 
     if (direction === 'right') {
+      await cashFlowService.remove(id);
+      fetchInitialData();
       console.log('deletado');
     }
 

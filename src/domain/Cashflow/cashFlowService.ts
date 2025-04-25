@@ -35,13 +35,20 @@ async function getTotalIncome(date?: Date): Promise<number> {
 }
 
 async function create(cashFlow: Omit<CashFlow, 'id'>): Promise<CashFlow> {
-  const created = await cashFlowFirebase.createTransactions(cashFlow);
+  const created = await cashFlowFirebase.create(cashFlow);
   return created;
+}
+
+async function remove(id: string): Promise<void> {
+  const removed = await cashFlowFirebase.remove(id);
+
+  return removed;
 }
 
 export const cashFlowService = {
   getList,
   create,
+  remove,
   getTotalExpenses,
   getTotalIncome,
 };

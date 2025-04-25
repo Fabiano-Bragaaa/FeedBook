@@ -1,6 +1,6 @@
 import {useState} from 'react';
 
-import {cashFlowService} from '@domain';
+import {cashFlowService, useCashFlowCreate} from '@domain';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {useForm} from 'react-hook-form';
 
@@ -10,6 +10,7 @@ import {AppTabScreenProps} from '@routes';
 import {NewSchema, TypeNewSchema} from './NewSchema';
 
 export function New({navigation}: AppTabScreenProps<'New'>) {
+  const {mutate} = useCashFlowCreate();
   const [selectedType, setSelectedType] = useState<'expense' | 'income'>(
     'income',
   );
@@ -27,11 +28,13 @@ export function New({navigation}: AppTabScreenProps<'New'>) {
   async function submitForm({amount, description}: TypeNewSchema) {
     try {
       setLoading(true);
-      await cashFlowService.create({
-        amount,
-        date: new Date(),
-        description,
-        type: selectedType,
+      await mutate({
+        data: {
+          amount,
+          date: new Date(),
+          description,
+          type: selectedType,
+        },
       });
       console.log('cadastro feito');
       reset();
