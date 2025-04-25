@@ -13,6 +13,7 @@ import {
   query,
   QueryDocumentSnapshot,
   startAfter,
+  updateDoc,
   where,
 } from 'firebase/firestore';
 
@@ -130,10 +131,36 @@ async function getItemById(id: string): Promise<CashFlow> {
   };
 }
 
+async function update(
+  id: string,
+  updatedData: {
+    description: string;
+    amount: number;
+    type: 'expense' | 'income';
+  },
+): Promise<CashFlow> {
+  const docRef = doc(db, 'transactions', id);
+
+  await updateDoc(docRef, updatedData);
+
+  const updatedDoc = await getDoc(docRef);
+
+  const data = updatedDoc.data()!;
+
+  return {
+    id: updatedDoc.id,
+    type: data.type,
+    amount: data.amount,
+    description: data.description,
+    date: data.date.toDate(),
+  };
+}
+
 export const cashFlowFirebase = {
   getList,
   create,
   remove,
+  update,
   getTotalExpenses,
   getTotalIncome,
   getItemById,

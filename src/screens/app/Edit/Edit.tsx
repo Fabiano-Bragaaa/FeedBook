@@ -8,7 +8,7 @@ import {useForm} from 'react-hook-form';
 import {Box, Button, FormTextInput, Screen, Text} from '@components';
 import {AppScreenProps} from '@routes';
 
-export function Edit({route}: AppScreenProps<'Edit'>) {
+export function Edit({route, navigation}: AppScreenProps<'Edit'>) {
   const id = route.params.id;
 
   console.log(id);
@@ -29,6 +29,23 @@ export function Edit({route}: AppScreenProps<'Edit'>) {
       mode: 'onChange',
     },
   );
+
+  async function updateData({amount, description}: TypeCashFlowSchema) {
+    try {
+      setLoading(true);
+      await cashFlowService.update(id, {
+        amount,
+        description,
+        type: selectedType,
+      });
+      navigation.navigate('AppTabNavigator', {screen: 'Home'});
+      console.log('atualizado');
+    } catch (err) {
+      console.log('erro ao cadastrar', err);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
     async function fetchData() {
@@ -95,7 +112,7 @@ export function Edit({route}: AppScreenProps<'Edit'>) {
         title="Registre"
         mt="s10"
         disabled={!formState.isValid}
-        onPress={handleSubmit(() => {})}
+        onPress={handleSubmit(updateData)}
         loading={loading}
       />
     </Screen>

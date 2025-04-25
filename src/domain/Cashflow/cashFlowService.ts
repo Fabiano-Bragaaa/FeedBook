@@ -51,6 +51,19 @@ async function getItemById(id: string): Promise<CashFlow> {
   return data;
 }
 
+async function update(
+  id: string,
+  updatedData: {
+    description: string;
+    amount: number;
+    type: 'expense' | 'income';
+  },
+): Promise<CashFlow> {
+  const data = await cashFlowFirebase.update(id, updatedData);
+
+  return data;
+}
+
 export const cashFlowService = {
   getList,
   create,
@@ -58,4 +71,5 @@ export const cashFlowService = {
   getTotalExpenses,
   getTotalIncome,
   getItemById,
+  update,
 };
