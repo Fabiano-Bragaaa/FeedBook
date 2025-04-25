@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 
-import {CashFlow, cashFlowService} from '@domain';
+import {CashFlow, cashFlowService, useCashFlowUpdate} from '@domain';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {CashFlowSchema, TypeCashFlowSchema} from '@utils';
 import {useForm} from 'react-hook-form';
@@ -11,7 +11,7 @@ import {AppScreenProps} from '@routes';
 export function Edit({route, navigation}: AppScreenProps<'Edit'>) {
   const id = route.params.id;
 
-  console.log(id);
+  const {mutate} = useCashFlowUpdate();
 
   const [selectedType, setSelectedType] = useState<'expense' | 'income'>(
     'income',
@@ -33,10 +33,13 @@ export function Edit({route, navigation}: AppScreenProps<'Edit'>) {
   async function updateData({amount, description}: TypeCashFlowSchema) {
     try {
       setLoading(true);
-      await cashFlowService.update(id, {
-        amount,
-        description,
-        type: selectedType,
+      await mutate({
+        id,
+        updatedData: {
+          amount,
+          description,
+          type: selectedType,
+        },
       });
       navigation.navigate('AppTabNavigator', {screen: 'Home'});
       console.log('atualizado');
