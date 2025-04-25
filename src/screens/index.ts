@@ -7,4 +7,4 @@ export * from './app/Home/Home';
 export * from './app/New/New';
 export * from './app/Profile/Profile';
 
-export * from './app/Settings/Settings';
+export * from './app/Edit/Edit';

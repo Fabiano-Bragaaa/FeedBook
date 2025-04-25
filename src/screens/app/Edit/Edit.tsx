@@ -1,19 +1,23 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 
-import {cashFlowService, useCashFlowCreate} from '@domain';
+import {CashFlow, cashFlowService} from '@domain';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {CashFlowSchema, TypeCashFlowSchema} from '@utils';
 import {useForm} from 'react-hook-form';
 
 import {Box, Button, FormTextInput, Screen, Text} from '@components';
-import {AppTabScreenProps} from '@routes';
+import {AppScreenProps} from '@routes';
 
-export function New({navigation}: AppTabScreenProps<'New'>) {
-  const {mutate} = useCashFlowCreate();
+export function Edit({route}: AppScreenProps<'Edit'>) {
+  const id = route.params.id;
+
+  console.log(id);
+
   const [selectedType, setSelectedType] = useState<'expense' | 'income'>(
     'income',
   );
   const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<CashFlow>();
 
   const {control, formState, handleSubmit, reset} = useForm<TypeCashFlowSchema>(
     {
@@ -26,31 +30,23 @@ export function New({navigation}: AppTabScreenProps<'New'>) {
     },
   );
 
-  async function submitForm({amount, description}: TypeCashFlowSchema) {
-    try {
-      setLoading(true);
-      await mutate({
-        data: {
-          amount,
-          date: new Date(),
-          description,
-          type: selectedType,
-        },
+  useEffect(() => {
+    async function fetchData() {
+      const response = await cashFlowService.getItemById(id);
+      setData(response);
+      setSelectedType(response.type);
+      reset({
+        amount: response.amount,
+        description: response.description,
       });
-      console.log('cadastro feito');
-      reset();
-      setSelectedType('income');
-    } catch (err) {
-      console.log('erro ao cadastrar', err);
-    } finally {
-      setLoading(false);
     }
-  }
+    fetchData();
+  }, [id, reset]);
 
   return (
     <Screen scrollable>
       <Text preset="headingMedium" mb="s32">
-        Registre suas movimentações
+        Edite sua movimentação
       </Text>
       <FormTextInput
         control={control}
@@ -99,7 +95,7 @@ export function New({navigation}: AppTabScreenProps<'New'>) {
         title="Registre"
         mt="s10"
         disabled={!formState.isValid}
-        onPress={handleSubmit(submitForm)}
+        onPress={handleSubmit(() => {})}
         loading={loading}
       />
     </Screen>

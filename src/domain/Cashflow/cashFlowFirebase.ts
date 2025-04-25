@@ -6,6 +6,7 @@ import {
   deleteDoc,
   doc,
   DocumentData,
+  getDoc,
   getDocs,
   limit,
   orderBy,
@@ -114,10 +115,26 @@ async function getTotalIncome(date?: Date): Promise<number> {
   return total;
 }
 
+async function getItemById(id: string): Promise<CashFlow> {
+  const docRef = doc(db, 'transactions', id);
+  const docSnap = await getDoc(docRef);
+
+  const data = await docSnap.data()!;
+
+  return {
+    id: docSnap.id,
+    type: data.type,
+    amount: data.amount,
+    description: data.description,
+    date: data.date.toDate(),
+  };
+}
+
 export const cashFlowFirebase = {
   getList,
   create,
   remove,
   getTotalExpenses,
   getTotalIncome,
+  getItemById,
 };

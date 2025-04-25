@@ -1,6 +1,6 @@
 import {useCallback, useRef, useState} from 'react';
 
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {DocumentData, QueryDocumentSnapshot} from 'firebase/firestore';
 import {SwipeableMethods} from 'react-native-gesture-handler/lib/typescript/components/ReanimatedSwipeable';
 
@@ -14,6 +14,8 @@ export function useCashFlowList() {
   const [lastVisible, setLastVisible] =
     useState<QueryDocumentSnapshot<DocumentData>>();
   const [hasNextPage, setHasNextPage] = useState(true);
+
+  const {navigate} = useNavigation();
 
   const swipeableRef = useRef<SwipeableMethods | null>(null);
 
@@ -70,6 +72,10 @@ export function useCashFlowList() {
       await cashFlowService.remove(id);
       fetchInitialData();
       console.log('deletado');
+    }
+
+    if (direction === 'left') {
+      navigate('Edit', {id});
     }
 
     if (swipeableRef.current) {

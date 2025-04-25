@@ -1,6 +1,6 @@
 import {z} from 'zod';
 
-export const NewSchema = z.object({
+export const CashFlowSchema = z.object({
   description: z.string().min(1, 'Descrição obrigatória'),
   amount: z.preprocess(
     val => Number(val),
@@ -8,4 +8,4 @@ export const NewSchema = z.object({
   ),
 });
 
-export type TypeNewSchema = z.infer<typeof NewSchema>;
+export type TypeCashFlowSchema = z.infer<typeof CashFlowSchema>;

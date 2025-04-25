@@ -45,10 +45,17 @@ async function remove(id: string): Promise<void> {
   return removed;
 }
 
+async function getItemById(id: string): Promise<CashFlow> {
+  const data = await cashFlowFirebase.getItemById(id);
+
+  return data;
+}
+
 export const cashFlowService = {
   getList,
   create,
   remove,
   getTotalExpenses,
   getTotalIncome,
+  getItemById,
 };
