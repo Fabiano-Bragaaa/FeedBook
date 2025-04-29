@@ -1,51 +1,18 @@
-import {useState} from 'react';
-
-import {cashFlowService, useCashFlowCreate} from '@domain';
-import {zodResolver} from '@hookform/resolvers/zod';
-import {CashFlowSchema, TypeCashFlowSchema} from '@utils';
-import {useForm} from 'react-hook-form';
+import {useCashFlowCreateForm} from '@domain';
 
 import {Box, Button, FormTextInput, Screen, Text} from '@components';
 import {AppTabScreenProps} from '@routes';
 
 export function New({navigation}: AppTabScreenProps<'New'>) {
-  const {mutate} = useCashFlowCreate();
-  const [selectedType, setSelectedType] = useState<'expense' | 'income'>(
-    'income',
-  );
-  const [loading, setLoading] = useState(false);
-
-  const {control, formState, handleSubmit, reset} = useForm<TypeCashFlowSchema>(
-    {
-      resolver: zodResolver(CashFlowSchema),
-      defaultValues: {
-        amount: 0,
-        description: '',
-      },
-      mode: 'onChange',
-    },
-  );
-
-  async function submitForm({amount, description}: TypeCashFlowSchema) {
-    try {
-      setLoading(true);
-      await mutate({
-        data: {
-          amount,
-          date: new Date(),
-          description,
-          type: selectedType,
-        },
-      });
-      console.log('cadastro feito');
-      reset();
-      setSelectedType('income');
-    } catch (err) {
-      console.log('erro ao cadastrar', err);
-    } finally {
-      setLoading(false);
-    }
-  }
+  const {
+    control,
+    formState,
+    handleSubmit,
+    submitForm,
+    selectedType,
+    setSelectedType,
+    loading,
+  } = useCashFlowCreateForm();
 
   return (
     <Screen scrollable>
