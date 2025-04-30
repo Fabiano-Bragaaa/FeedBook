@@ -1,6 +1,7 @@
 import {useCallback, useRef, useState} from 'react';
 
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useToast, useToastService} from '@services';
 import {DocumentData, QueryDocumentSnapshot} from 'firebase/firestore';
 import {SwipeableMethods} from 'react-native-gesture-handler/lib/typescript/components/ReanimatedSwipeable';
 
@@ -16,7 +17,16 @@ export function useCashFlowList() {
     useState<QueryDocumentSnapshot<DocumentData>>();
   const [hasNextPage, setHasNextPage] = useState(true);
 
-  const {mutate} = useCashFlowRemove();
+  const {showToast} = useToastService();
+
+  const {mutate} = useCashFlowRemove({
+    onSuccess: () => {
+      showToast({message: 'Movimentação deletada'});
+    },
+    onError: () => {
+      showToast({message: 'Erro ao deletar movimentação'});
+    },
+  });
 
   const {navigate} = useNavigation();
 
