@@ -1,7 +1,11 @@
+export type ToastPosition = 'top' | 'bottom';
+export type ToastType = 'success' | 'error';
+
 export interface Toast {
   message: string;
-  type?: 'success' | 'error';
+  type?: ToastType;
   duration?: number;
+  position?: ToastPosition;
   action?: {
     title: string;
     onPress: () => void;

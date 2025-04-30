@@ -21,7 +21,10 @@ export function useCashFlowList() {
 
   const {mutate} = useCashFlowRemove({
     onSuccess: () => {
-      showToast({message: 'Movimentação deletada'});
+      showToast({
+        message: 'Movimentação deletada',
+        duration: 5000,
+      });
     },
     onError: () => {
       showToast({message: 'Erro ao deletar movimentação'});
