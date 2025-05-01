@@ -1,15 +1,29 @@
 import {useEffect, useState} from 'react';
 
-import {CashFlow, cashFlowService, useCashFlowUpdate} from '@domain';
+import {
+  CashFlow,
+  cashFlowService,
+  useCashFlowUpdate,
+  useItemById,
+} from '@domain';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {CashFlowSchema, TypeCashFlowSchema} from '@utils';
 import {useForm} from 'react-hook-form';
+import {ScrollView} from 'react-native-gesture-handler';
 
-import {Box, Button, FormTextInput, Screen, Text} from '@components';
+import {
+  ActivityIndicator,
+  Box,
+  Button,
+  FormTextInput,
+  Screen,
+  Text,
+} from '@components';
 import {AppScreenProps} from '@routes';
 
 export function Edit({route, navigation}: AppScreenProps<'Edit'>) {
   const id = route.params.id;
+  const {data, isError, isLoading} = useItemById(id);
 
   const {mutate} = useCashFlowUpdate();
 
@@ -17,7 +31,7 @@ export function Edit({route, navigation}: AppScreenProps<'Edit'>) {
     'income',
   );
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<CashFlow>();
+  const [dataList, setDataList] = useState<CashFlow>();
 
   const {control, formState, handleSubmit, reset} = useForm<TypeCashFlowSchema>(
     {
@@ -51,73 +65,79 @@ export function Edit({route, navigation}: AppScreenProps<'Edit'>) {
   }
 
   useEffect(() => {
-    async function fetchData() {
-      const response = await cashFlowService.getItemById(id);
-      setData(response);
-      setSelectedType(response.type);
-      reset({
-        amount: response.amount,
-        description: response.description,
-      });
+    if (!data) {
+      return;
     }
-    fetchData();
-  }, [id, reset]);
+
+    setDataList(data);
+    setSelectedType(data.type);
+    reset({
+      amount: data.amount,
+      description: data.description,
+    });
+  }, [data, reset]);
 
   return (
-    <Screen scrollable>
-      <Text preset="headingMedium" mb="s32">
-        Edite sua movimentação
-      </Text>
-      <FormTextInput
-        control={control}
-        name="description"
-        label="Descrição"
-        placeholder="Descreva essa movimentação"
-        boxProps={{
-          mb: 's24',
-        }}
-      />
+    <Screen canGoBack scrollable>
+      {isLoading && <ActivityIndicator />}
+      {isError && <Text>Erro ao carregar os dados da movimentação</Text>}
+      {data && (
+        <>
+          <Text preset="headingMedium" mb="s32">
+            Edite sua movimentação
+          </Text>
+          <FormTextInput
+            control={control}
+            name="description"
+            label="Descrição"
+            placeholder="Descreva essa movimentação"
+            boxProps={{
+              mb: 's24',
+            }}
+          />
 
-      <FormTextInput
-        control={control}
-        name="amount"
-        label="Valor"
-        placeholder="Valor da movimentação"
-        keyboardType="numeric"
-        isMoney
-        boxProps={{
-          mb: 's32',
-        }}
-      />
+          <FormTextInput
+            control={control}
+            name="amount"
+            label="Valor"
+            placeholder="Valor da movimentação"
+            keyboardType="numeric"
+            isMoney
+            boxProps={{
+              mb: 's32',
+            }}
+          />
 
-      <Box flexDirection="row">
-        <Button
-          title="Receita"
-          preset="noSelected"
-          flex={1}
-          mr="s8"
-          selected={selectedType === 'income'}
-          selectedColor="success"
-          onPress={() => setSelectedType('income')}
-        />
-        <Button
-          title="Despesa"
-          preset="noSelected"
-          flex={1}
-          mb="s48"
-          selected={selectedType === 'expense'}
-          selectedColor="redError"
-          onPress={() => setSelectedType('expense')}
-        />
-      </Box>
+          <Box flexDirection="row">
+            <Button
+              title="Receita"
+              preset="noSelected"
+              flex={1}
+              mr="s8"
+              selected={selectedType === 'income'}
+              selectedColor="success"
+              onPress={() => setSelectedType('income')}
+            />
+            <Button
+              title="Despesa"
+              preset="noSelected"
+              flex={1}
+              mb="s48"
+              selected={selectedType === 'expense'}
+              selectedColor="redError"
+              onPress={() => setSelectedType('expense')}
+            />
+          </Box>
 
-      <Button
-        title="Registre"
-        mt="s10"
-        disabled={!formState.isValid}
-        onPress={handleSubmit(updateData)}
-        loading={loading}
-      />
+          <Button
+            title="Registre"
+            mt="s10"
+            disabled={!formState.isValid}
+            onPress={handleSubmit(updateData)}
+            loading={loading}
+          />
+        </>
+      )}
     </Screen>
   );
 }
