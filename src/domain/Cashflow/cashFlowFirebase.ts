@@ -4,7 +4,7 @@ import {
   addDoc,
   collection,
   deleteDoc,
-  doc,
+  doc as docFirebase,
   DocumentData,
   getDoc,
   getDocs,
@@ -70,7 +70,7 @@ async function create(cashFlow: Omit<CashFlow, 'id'>): Promise<CashFlow> {
 }
 
 async function remove(id: string): Promise<void> {
-  const docRef = doc(db, 'transactions', id);
+  const docRef = docFirebase(db, 'transactions', id);
   await deleteDoc(docRef);
 }
 
@@ -117,7 +117,7 @@ async function getTotalIncome(date?: Date): Promise<number> {
 }
 
 async function getItemById(id: string): Promise<CashFlow> {
-  const docRef = doc(db, 'transactions', id);
+  const docRef = docFirebase(db, 'transactions', id);
   const docSnap = await getDoc(docRef);
 
   const data = await docSnap.data()!;
@@ -139,7 +139,7 @@ async function update(
     type: 'expense' | 'income';
   },
 ): Promise<CashFlow> {
-  const docRef = doc(db, 'transactions', id);
+  const docRef = docFirebase(db, 'transactions', id);
 
   await updateDoc(docRef, updatedData);
 
