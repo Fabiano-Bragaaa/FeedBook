@@ -1,4 +1,4 @@
-import {useCallback, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 
 import {QueryKeys} from '@infra';
 import {useFocusEffect} from '@react-navigation/native';
@@ -28,16 +28,14 @@ export function useGetList(date: Date): useCashFlowListResult {
     },
   });
 
-  useFocusEffect(
-    useCallback(() => {
-      if (data) {
-        const newList = data.pages.reduce<CashFlow[]>((prev, curr) => {
-          return [...prev, ...curr.data];
-        }, []);
-        setCashList(newList);
-      }
-    }, [data]),
-  );
+  useEffect(() => {
+    if (data) {
+      const newList = data.pages.reduce<CashFlow[]>((prev, curr) => {
+        return [...prev, ...curr.data];
+      }, []);
+      setCashList(newList);
+    }
+  }, [data]);
 
   return {
     cashList,

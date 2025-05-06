@@ -7,7 +7,7 @@ import {useForm} from 'react-hook-form';
 import {useCashFlowCreate} from '../mutations';
 
 export function useCashFlowCreateForm() {
-  const {mutate, loading} = useCashFlowCreate();
+  const {mutate, isLoading} = useCashFlowCreate();
   const [selectedType, setSelectedType] = useState<'expense' | 'income'>(
     'income',
   );
@@ -26,12 +26,10 @@ export function useCashFlowCreateForm() {
   async function submitForm({amount, description}: TypeCashFlowSchema) {
     try {
       await mutate({
-        data: {
-          amount,
-          date: new Date(),
-          description,
-          type: selectedType,
-        },
+        amount,
+        date: new Date(),
+        description,
+        type: selectedType,
       });
       console.log('cadastro feito');
       reset();
@@ -48,6 +46,6 @@ export function useCashFlowCreateForm() {
     submitForm,
     selectedType,
     setSelectedType,
-    loading,
+    loading: isLoading,
   };
 }

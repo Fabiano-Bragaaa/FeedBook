@@ -1,4 +1,4 @@
-import {MutationOption} from '@infra';
+import {MutationOption, QueryKeys} from '@infra';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 
 import {cashFlowService} from '../../cashFlowService';
@@ -7,7 +7,7 @@ import {CashFlow} from '../../cashFlowTypes';
 export function useCashFlowUpdate(options?: MutationOption<CashFlow>) {
   const queryClient = useQueryClient();
 
-  const {} = useMutation<
+  const {mutate, isError, isLoading} = useMutation<
     CashFlow,
     unknown,
     {
@@ -20,22 +20,24 @@ export function useCashFlowUpdate(options?: MutationOption<CashFlow>) {
     }
   >({
     mutationFn: ({id, updatedData}) => cashFlowService.update(id, updatedData),
-    onSuccess: ({}) => {
+    onSuccess: data => {
       queryClient.invalidateQueries({
-        queryKey: [],
+        queryKey: [QueryKeys.MovimentationList],
       });
+      if (options?.onSuccess) {
+        options.onSuccess(data);
+      }
+    },
+    onError: () => {
+      if (options?.onError) {
+        options.onError(options?.errorMessage || 'Ocorreu um erro');
+      }
     },
   });
 
-  // return useMutation<
-  //   {
-  //     id: string;
-  //     updatedData: {
-  //       description: string;
-  //       amount: number;
-  //       type: 'expense' | 'income';
-  //     };
-  //   },
-  //   CashFlow
-  // >(({id, updatedData}) => cashFlowService.update(id, updatedData), options);
+  return {
+    mutate,
+    isLoading,
+    isError,
+  };
 }

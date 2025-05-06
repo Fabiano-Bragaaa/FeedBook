@@ -9,8 +9,6 @@ export function useCashFlowCardHeader() {
   const [balance, setBalance] = useState<number>(0);
 
   async function fetchData() {
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
     const expenseValue = await cashFlowService.getTotalExpenses();
     const incomeValue = await cashFlowService.getTotalIncome();
 

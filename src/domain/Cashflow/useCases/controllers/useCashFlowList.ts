@@ -3,16 +3,18 @@ import {useRef} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {SwipeableMethods} from 'react-native-gesture-handler/lib/typescript/components/ReanimatedSwipeable';
 
-import {cashFlowService} from '../../cashFlowService';
+import {useCashFlowRemove} from '../mutations/useCashFlowRemove';
 import {useGetList} from '../queries';
 
 export function useCashFlowList(date?: Date) {
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-
   const currentDate = date || new Date();
   const {cashList, fetchNextPage, isError, isLoading, refetch} =
-    useGetList(yesterday);
+    useGetList(currentDate);
+  const {mutate} = useCashFlowRemove({
+    onSuccess: () => {
+      refetch();
+    },
+  });
   const {navigate} = useNavigation();
 
   const swipeableRef = useRef<SwipeableMethods | null>(null);
@@ -25,9 +27,9 @@ export function useCashFlowList(date?: Date) {
     console.log(direction);
 
     if (direction === 'right') {
-      await cashFlowService.remove(id);
-      refetch();
-      console.log('deletado');
+      mutate({
+        id,
+      });
     }
 
     if (direction === 'left') {
