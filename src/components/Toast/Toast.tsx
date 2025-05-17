@@ -6,6 +6,7 @@ import {ToastPosition, useToast, useToastService} from '@services';
 import {ToastContent} from './components/ToastContent';
 
 const DEFAULT_DURATION = 2000;
+
 export function Toast() {
   const toast = useToast();
   const {hiddenToast} = useToastService();
@@ -21,7 +22,6 @@ export function Toast() {
       useNativeDriver: true,
     }).start();
   }, [fadeAnim]);
-
   const runExitingAnimation = useCallback(
     (callback: Animated.EndCallback) => {
       Animated.timing(fadeAnim, {
@@ -40,10 +40,10 @@ export function Toast() {
         runExitingAnimation(hiddenToast);
       }, toast.duration || DEFAULT_DURATION);
     }
-  }, [toast, hiddenToast, runEnteringAnimation, runExitingAnimation]);
+  }, [hiddenToast, runEnteringAnimation, runExitingAnimation, toast]);
 
   if (!toast) {
-    return;
+    return null;
   }
 
   return (

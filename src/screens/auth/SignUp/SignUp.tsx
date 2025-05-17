@@ -1,3 +1,4 @@
+import {useAuthSignUp} from '@domain';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {useForm} from 'react-hook-form';
 
@@ -9,12 +10,27 @@ import {
   Text,
 } from '@components';
 import {useResetNavigationSuccess} from '@hooks';
-import {AuthScreenProps} from '@routes';
+import {AuthScreenProps, AuthStackParamList} from '@routes';
 
 import {signUpSchema, TypeSignUpSchema} from './SignUpSchema';
 
+const resetParams: AuthStackParamList['Success'] = {
+  title: 'Sua conta foi criada com sucesso!',
+  description: 'Agora é só fazer login na nossa plataforma',
+  icon: {
+    name: 'checkRound',
+    size: 60,
+    color: 'success',
+  },
+};
+
 export function SignUp({navigation}: AuthScreenProps<'SignUp'>) {
   const {reset} = useResetNavigationSuccess();
+  const {isLoading, signUp} = useAuthSignUp({
+    onSuccess: () => {
+      reset(resetParams);
+    },
+  });
 
   const {control, formState, handleSubmit} = useForm<TypeSignUpSchema>({
     resolver: zodResolver(signUpSchema),
@@ -27,18 +43,8 @@ export function SignUp({navigation}: AuthScreenProps<'SignUp'>) {
     mode: 'onChange',
   });
 
-  function submitForm(props: TypeSignUpSchema) {
-    console.log(props);
-
-    reset({
-      title: 'Sua conta foi criada com sucesso!',
-      description: 'Agora é só fazer login na nossa plataforma',
-      icon: {
-        name: 'checkRound',
-        size: 60,
-        color: 'success',
-      },
-    });
+  function submitForm({email, password, fullName}: TypeSignUpSchema) {
+    signUp({email, password, displayName: fullName});
   }
 
   return (
@@ -77,6 +83,7 @@ export function SignUp({navigation}: AuthScreenProps<'SignUp'>) {
       />
 
       <Button
+        loading={isLoading}
         disabled={!formState.isValid}
         title="Criar minha conta"
         mt="s48"
