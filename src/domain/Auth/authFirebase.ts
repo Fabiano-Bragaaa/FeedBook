@@ -1,7 +1,17 @@
 import {auth} from '@services';
-import {createUserWithEmailAndPassword, updateProfile} from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from 'firebase/auth';
 
 import {User} from './authTypes';
+
+async function signIn(email: string, password: string): Promise<User> {
+  const {user} = await signInWithEmailAndPassword(auth, email, password);
+
+  return user;
+}
 
 async function signUp(
   email: string,
@@ -17,4 +27,5 @@ async function signUp(
 
 export const authFirebase = {
   signUp,
+  signIn,
 };
