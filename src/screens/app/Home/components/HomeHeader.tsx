@@ -1,4 +1,5 @@
 import {useAuthSignOut} from '@domain';
+import {useToastService} from '@services';
 
 import {Box, BoxProps, Button, Text} from '@components';
 import {useAppSafeArea} from '@hooks';
@@ -7,8 +8,14 @@ import {HomeSlider} from './HomeSlide';
 
 export function HomeHeader() {
   const {top} = useAppSafeArea();
+  const {showToast} = useToastService();
 
-  const {isLoading, signOut} = useAuthSignOut();
+  const {isLoading, signOut} = useAuthSignOut({
+    errorMessage: 'Erro ao tentar sair do aplicativo',
+    onError: message => {
+      showToast({message, type: 'error'});
+    },
+  });
   return (
     <Box mb="s32" style={{paddingTop: top}}>
       <Box {...$wrapper}>
