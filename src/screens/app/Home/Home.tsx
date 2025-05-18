@@ -7,7 +7,7 @@ import {
   ViewStyle,
 } from 'react-native';
 
-import {CashFlow, useCashFlowList} from '@domain';
+import {CashFlow,  useCashFlowList} from '@domain';
 import {useScrollToTop} from '@react-navigation/native';
 import Swipeable, {
   SwipeableMethods,
@@ -23,6 +23,8 @@ import {HomeHeader} from './components/HomeHeader';
 export function Home({navigation}: AppTabScreenProps<'Home'>) {
   const {cashList, onSwipeableOpen, refresh, fetchNextPage, error, loading} =
     useCashFlowList();
+
+
   const {colors} = useAppTheme();
 
   const flatListRef = useRef<FlatList<CashFlow>>(null);

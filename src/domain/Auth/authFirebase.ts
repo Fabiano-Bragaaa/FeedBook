@@ -3,6 +3,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
+  signOut,
 } from 'firebase/auth';
 
 import {User} from './authTypes';
@@ -25,7 +26,12 @@ async function signUp(
   return user;
 }
 
+async function logout(): Promise<void> {
+  await signOut(auth);
+}
+
 export const authFirebase = {
   signUp,
   signIn,
+  logout,
 };

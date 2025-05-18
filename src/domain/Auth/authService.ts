@@ -17,7 +17,12 @@ async function signUp(
   return user;
 }
 
+async function signOut(): Promise<void> {
+  await authFirebase.logout();
+}
+
 export const authService = {
   signIn,
   signUp,
+  signOut,
 };
