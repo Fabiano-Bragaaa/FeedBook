@@ -15,11 +15,14 @@ const useAuthCredentialsZustand = create<AuthCredentialsType>()(
       userCredentials: null,
       saveCredentials: async user => set({userCredentials: user}),
       removeCredentials: async () => set({userCredentials: null}),
-      isLoading: false,
+      isLoading: true,
     }),
     {
       name: '@Auth',
       storage: storage,
+      onRehydrateStorage: () => () => {
+        useAuthCredentialsZustand.setState({isLoading: false});
+      },
     },
   ),
 );
