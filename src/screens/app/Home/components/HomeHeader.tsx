@@ -1,5 +1,5 @@
 import {useAuthSignOut} from '@domain';
-import {useToastService} from '@services';
+import {useAuthCredentials, useToastService} from '@services';
 
 import {Box, BoxProps, Button, Text} from '@components';
 import {useAppSafeArea} from '@hooks';
@@ -9,6 +9,8 @@ import {HomeSlider} from './HomeSlide';
 export function HomeHeader() {
   const {top} = useAppSafeArea();
   const {showToast} = useToastService();
+
+  const {userCredentials} = useAuthCredentials();
 
   const {isLoading, signOut} = useAuthSignOut({
     errorMessage: 'Erro ao tentar sair do aplicativo',
@@ -21,7 +23,7 @@ export function HomeHeader() {
       <Box {...$wrapper}>
         <Box flexDirection="row">
           <Text preset="paragraphLarge">Olá, </Text>
-          <Text preset="headingSmall">Fabiano!</Text>
+          <Text preset="headingSmall">{userCredentials?.displayName}!</Text>
         </Box>
         <Button
           title="Sair do aplicativo"
