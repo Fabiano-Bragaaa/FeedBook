@@ -19,7 +19,7 @@ const useAuthCredentialsZustand = create<AuthCredentialsType>()(
     }),
     {
       name: '@Auth',
-      storage: storage,
+      storage,
       onRehydrateStorage: () => () => {
         useAuthCredentialsZustand.setState({isLoading: false});
       },
