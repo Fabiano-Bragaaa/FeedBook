@@ -4,6 +4,7 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
   signOut,
+  sendPasswordResetEmail,
 } from 'firebase/auth';
 
 import {User} from './authTypes';
@@ -30,8 +31,13 @@ async function logout(): Promise<void> {
   await signOut(auth);
 }
 
+async function forgoutPassword(email: string): Promise<void> {
+  await sendPasswordResetEmail(auth, email);
+}
+
 export const authFirebase = {
   signUp,
   signIn,
   logout,
+  forgoutPassword,
 };

@@ -1,21 +1,36 @@
+import {useAuthForgoutPassword} from '@domain';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {useForm} from 'react-hook-form';
 
 import {Button, FormTextInput, Screen, Text} from '@components';
 import {useResetNavigationSuccess} from '@hooks';
-import {AuthScreenProps} from '@routes';
+import {AuthScreenProps, AuthStackParamList} from '@routes';
 
 import {
   forgetPasswordSchema,
   TypeForgetPasswordSchema,
 } from './ForgetPasswordSchema';
 
+const resetParams: AuthStackParamList['Success'] = {
+  title: 'Enviamos as intruções para seu e-mail',
+  description: 'Clique no link enviado no seu e-mail para recuperar a senha',
+  icon: {
+    name: 'messageRound',
+    color: 'success',
+    size: 60,
+  },
+};
+
 export function ForgetPassword({
   navigation,
 }: AuthScreenProps<'ForgetPassword'>) {
   const {reset} = useResetNavigationSuccess();
-
+  const {forgoutPassword, isLoading} = useAuthForgoutPassword({
+    onSuccess: () => {
+      reset(resetParams);
+    },
+  });
   const {control, formState, handleSubmit} = useForm<TypeForgetPasswordSchema>({
     resolver: zodResolver(forgetPasswordSchema),
     defaultValues: {
@@ -24,19 +39,8 @@ export function ForgetPassword({
     mode: 'onChange',
   });
 
-  function submitForm(props: TypeForgetPasswordSchema) {
-    console.log(props);
-
-    reset({
-      title: 'Enviamos as intruções para seu e-mail',
-      description:
-        'Clique no link enviado no seu e-mail para recuperar a senha',
-      icon: {
-        name: 'messageRound',
-        color: 'success',
-        size: 60,
-      },
-    });
+  function submitForm(email: TypeForgetPasswordSchema) {
+    forgoutPassword(email);
   }
   return (
     <Screen canGoBack>
@@ -55,6 +59,7 @@ export function ForgetPassword({
       />
 
       <Button
+        loading={isLoading}
         disabled={!formState.isValid}
         title="Recuperar senha"
         mt="s48"

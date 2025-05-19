@@ -21,8 +21,12 @@ async function signOut(): Promise<void> {
   await authFirebase.logout();
 }
 
+async function forgoutPassword(email: string): Promise<void> {
+  await authFirebase.forgoutPassword(email);
+}
 export const authService = {
   signIn,
   signUp,
   signOut,
+  forgoutPassword,
 };
