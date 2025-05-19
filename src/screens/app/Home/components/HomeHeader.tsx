@@ -13,7 +13,6 @@ export function HomeHeader() {
   const {userCredentials} = useAuthCredentials();
 
   const {isLoading, signOut} = useAuthSignOut({
-    errorMessage: 'Erro ao tentar sair do aplicativo',
     onError: message => {
       showToast({message, type: 'error'});
     },

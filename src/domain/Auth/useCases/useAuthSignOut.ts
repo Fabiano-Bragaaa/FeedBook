@@ -7,13 +7,13 @@ import {authService} from '../authService';
 export function useAuthSignOut(options?: MutationOption<void>) {
   const {removeCredentials} = useAuthCredentials();
 
-  const mutation = useMutation<void, unknown, void>({
+  const mutation = useMutation<void, Error, void>({
     mutationFn: authService.signOut,
     retry: false,
     onSuccess: removeCredentials,
-    onError: () => {
+    onError: error => {
       if (options?.onError) {
-        options.onError(options.errorMessage || 'Ocorreu um erro');
+        options.onError(error.message);
       }
     },
   });

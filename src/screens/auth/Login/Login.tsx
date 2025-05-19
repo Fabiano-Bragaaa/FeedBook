@@ -18,8 +18,8 @@ export function Login({navigation}: AuthScreenProps<'Login'>) {
   const {showToast} = useToastService();
 
   const {isLoading, signIn} = useAuthSignIn({
-    onSuccess: ({displayName}) => {
-      showToast({message: `Seja bem vindo ${displayName}`});
+    onError: (message) => {
+      showToast({message, type: 'error'});
     },
   });
 

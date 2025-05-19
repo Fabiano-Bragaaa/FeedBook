@@ -8,17 +8,17 @@ type Variable = {
 };
 
 export function useAuthForgoutPassword(options?: MutationOption<void>) {
-  const mutation = useMutation<void, unknown, Variable>({
-    mutationFn: ({email}) => authService.forgoutPassword(email),
+  const mutation = useMutation<void, Error, Variable>({
+    mutationFn: ({email}) => authService.forgotPassword(email),
     retry: false,
     onSuccess: () => {
       if (options?.onSuccess) {
         options.onSuccess();
       }
     },
-    onError: () => {
+    onError: error => {
       if (options?.onError) {
-        options.onError(options.errorMessage || 'Ocorreu um erro');
+        options.onError(error.message);
       }
     },
   });

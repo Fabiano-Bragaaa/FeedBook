@@ -1,4 +1,6 @@
 import {auth} from '@services';
+import {translateFirebaseError} from '@utils';
+import {FirebaseError} from 'firebase/app';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -9,10 +11,19 @@ import {
 
 import {User} from './authTypes';
 
-async function signIn(email: string, password: string): Promise<User> {
-  const {user} = await signInWithEmailAndPassword(auth, email, password);
+const DEFAULT_ERROR = 'Erro inesperado. Tente novamente.';
 
-  return user;
+async function signIn(email: string, password: string): Promise<User> {
+  try {
+    const {user} = await signInWithEmailAndPassword(auth, email, password);
+
+    return user;
+  } catch (error) {
+    if (error instanceof FirebaseError) {
+      throw new Error(translateFirebaseError(error.code));
+    }
+    throw new Error(DEFAULT_ERROR);
+  }
 }
 
 async function signUp(
@@ -20,19 +31,42 @@ async function signUp(
   password: string,
   name: string,
 ): Promise<User> {
-  const {user} = await createUserWithEmailAndPassword(auth, email, password);
+  try {
+    const {user} = await createUserWithEmailAndPassword(auth, email, password);
 
-  await updateProfile(user, {displayName: name});
+    await updateProfile(user, {displayName: name});
 
-  return user;
+    return user;
+  } catch (error) {
+    if (error instanceof FirebaseError) {
+      throw new Error(translateFirebaseError(error.code));
+    }
+    throw new Error(DEFAULT_ERROR);
+  }
 }
 
 async function logout(): Promise<void> {
-  await signOut(auth);
+  try {
+    await signOut(auth);
+  } catch (error) {
+    if (error instanceof FirebaseError) {
+      console.log(error.code);
+
+      throw new Error(translateFirebaseError(error.code));
+    }
+    throw new Error(DEFAULT_ERROR);
+  }
 }
 
 async function forgoutPassword(email: string): Promise<void> {
-  await sendPasswordResetEmail(auth, email);
+  try {
+    await sendPasswordResetEmail(auth, email);
+  } catch (error) {
+    if (error instanceof FirebaseError) {
+      throw new Error(translateFirebaseError(error.code));
+    }
+    throw new Error(DEFAULT_ERROR);
+  }
 }
 
 export const authFirebase = {

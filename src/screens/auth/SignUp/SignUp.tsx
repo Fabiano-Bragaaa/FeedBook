@@ -1,5 +1,6 @@
 import {useAuthSignUp} from '@domain';
 import {zodResolver} from '@hookform/resolvers/zod';
+import {useToastService} from '@services';
 import {useForm} from 'react-hook-form';
 
 import {
@@ -25,10 +26,14 @@ const resetParams: AuthStackParamList['Success'] = {
 };
 
 export function SignUp({navigation}: AuthScreenProps<'SignUp'>) {
+  const {showToast} = useToastService();
   const {reset} = useResetNavigationSuccess();
   const {isLoading, signUp} = useAuthSignUp({
     onSuccess: () => {
       reset(resetParams);
+    },
+    onError: message => {
+      showToast({message, type: 'error'});
     },
   });
 
