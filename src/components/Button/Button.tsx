@@ -1,14 +1,17 @@
+import {ReactNode} from 'react';
+
 import {
   Text,
   TouchableOpacityBox,
   TouchableOpacityBoxProps,
   ActivityIndicator,
+  Box,
 } from '@components';
 import {themeColor} from '@theme';
 
 import {buttonPresets} from './buttonPresets';
 
-export type ButtonPreset = 'primary' | 'outline' | 'noSelected';
+export type ButtonPreset = 'primary' | 'outline' | 'noSelected' | 'google';
 
 interface ButtonProps extends TouchableOpacityBoxProps {
   title: string;
@@ -17,6 +20,7 @@ interface ButtonProps extends TouchableOpacityBoxProps {
   disabled?: boolean;
   selected?: boolean;
   selectedColor?: themeColor;
+  rightComponent?: ReactNode;
 }
 
 export function Button({
@@ -26,6 +30,7 @@ export function Button({
   disabled,
   selected,
   selectedColor = 'primary',
+  rightComponent,
   ...touchableOpacityBoxProps
 }: ButtonProps) {
   const buttonPreset = buttonPresets[preset][disabled ? 'disabled' : 'default'];
@@ -42,22 +47,30 @@ export function Button({
       disabled={disabled || loading}
       paddingHorizontal="s20"
       alignItems="center"
-      justifyContent="center"
+      justifyContent={rightComponent ? 'space-between' : 'center'}
+      flexDirection="row"
       height={50}
       borderRadius="s16"
       {...buttonPreset.container}
       {...$selectedOutline}
       {...touchableOpacityBoxProps}>
       {loading ? (
-        <ActivityIndicator color={buttonPreset.content} />
+        <Box flex={rightComponent ? 1 : undefined}>
+          <ActivityIndicator color={buttonPreset.content} />
+        </Box>
       ) : (
-        <Text
-          preset="paragraphMedium"
-          bold
-          color={$selectedTextColor ?? buttonPreset.content}>
-          {title}
-        </Text>
+        <Box flex={rightComponent ? 1 : undefined}>
+          <Text
+            textAlign={rightComponent ? 'center' : undefined}
+            preset="paragraphMedium"
+            bold
+            color={$selectedTextColor ?? buttonPreset.content}>
+            {title}
+          </Text>
+        </Box>
       )}
+
+      {rightComponent && <Box ml="s16">{rightComponent}</Box>}
     </TouchableOpacityBox>
   );
 }

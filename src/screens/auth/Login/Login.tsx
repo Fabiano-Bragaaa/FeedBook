@@ -1,24 +1,30 @@
+import {Image} from 'react-native';
+
 import {useAuthSignIn} from '@domain';
 import {zodResolver} from '@hookform/resolvers/zod';
+import {google} from '@images';
 import {useToastService} from '@services';
 import {useForm} from 'react-hook-form';
 
 import {
+  Box,
   Button,
   FormPasswordTextInput,
   FormTextInput,
+  Icon,
   Screen,
   Text,
 } from '@components';
 import {AuthScreenProps} from '@routes';
 
+import {Row} from './components/Row/Row';
 import {loginSchema, TypeLoginSchema} from './LoginSchema';
 
 export function Login({navigation}: AuthScreenProps<'Login'>) {
   const {showToast} = useToastService();
 
   const {isLoading, signIn} = useAuthSignIn({
-    onError: (message) => {
+    onError: message => {
       showToast({message, type: 'error'});
     },
   });
@@ -78,6 +84,19 @@ export function Login({navigation}: AuthScreenProps<'Login'>) {
         mt="s48"
         disabled={!formState.isValid}
         onPress={handleSubmit(submitForm)}
+      />
+      <Row />
+      <Button
+        preset="google"
+        title="Entrar com o google"
+        rightComponent={
+          <Image
+            source={google}
+            style={{width: 20, height: 20}}
+            resizeMode="contain"
+          />
+        }
+        mb="s40"
       />
       <Button
         title="Criar uma conta"

@@ -59,4 +59,20 @@ export const buttonPresets: Record<
       content: 'gray2',
     },
   },
+  google: {
+    default: {
+      container: {
+        borderWidth: 1,
+        borderColor: 'gray3',
+      },
+      content: 'backgroundContranst',
+    },
+    disabled: {
+      container: {
+        borderWidth: 1,
+        borderColor: 'gray3',
+      },
+      content: 'gray2',
+    },
+  },
 };
