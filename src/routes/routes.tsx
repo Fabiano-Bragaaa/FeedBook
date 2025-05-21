@@ -12,13 +12,13 @@ export function Router() {
   if (isLoading) {
     return (
       <Box flex={1} bg="background" justifyContent="center" alignItems="center">
-        <ActivityIndicator size="large"/>
+        <ActivityIndicator size="large" />
       </Box>
     );
   }
   return (
     <NavigationContainer>
-      {userCredentials ? <AppStack /> : <AuthStack />}
+      {userCredentials?.uid ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
   );
 }
