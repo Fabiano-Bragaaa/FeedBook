@@ -1,17 +1,21 @@
+import {useState} from 'react';
 import {Image} from 'react-native';
 
 import {useAuthSignIn} from '@domain';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {google} from '@images';
+import {
+  GoogleSignin,
+  User,
+  isSuccessResponse,
+} from '@react-native-google-signin/google-signin';
 import {useToastService} from '@services';
 import {useForm} from 'react-hook-form';
 
 import {
-  Box,
   Button,
   FormPasswordTextInput,
   FormTextInput,
-  Icon,
   Screen,
   Text,
 } from '@components';
@@ -21,6 +25,7 @@ import {Row} from './components/Row/Row';
 import {loginSchema, TypeLoginSchema} from './LoginSchema';
 
 export function Login({navigation}: AuthScreenProps<'Login'>) {
+  const [auth, setAuth] = useState<User | null>(null);
   const {showToast} = useToastService();
 
   const {isLoading, signIn} = useAuthSignIn({
@@ -38,6 +43,18 @@ export function Login({navigation}: AuthScreenProps<'Login'>) {
     mode: 'onChange',
   });
 
+  async function handleGoogleSignIn() {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const response = await GoogleSignin.signIn();
+      if (isSuccessResponse(response)) {
+        console.log(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   function navigateToForgetMyPassword() {
     navigation.navigate('ForgetPassword');
   }
@@ -46,7 +63,7 @@ export function Login({navigation}: AuthScreenProps<'Login'>) {
     signIn(props);
   }
 
-  function navigateToLogin() {
+  function navigateToSignUp() {
     navigation.navigate('SignUp');
   }
 
@@ -86,9 +103,16 @@ export function Login({navigation}: AuthScreenProps<'Login'>) {
         onPress={handleSubmit(submitForm)}
       />
       <Row />
+
+      <Button
+        title="Criar uma conta"
+        mb="s40"
+        onPress={navigateToSignUp}
+      />
       <Button
         preset="google"
         title="Entrar com o google"
+        onPress={handleGoogleSignIn}
         rightComponent={
           <Image
             source={google}
@@ -96,13 +120,7 @@ export function Login({navigation}: AuthScreenProps<'Login'>) {
             resizeMode="contain"
           />
         }
-        mb="s40"
-      />
-      <Button
-        title="Criar uma conta"
         mt="s14"
-        preset="outline"
-        onPress={navigateToLogin}
       />
     </Screen>
   );
