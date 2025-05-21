@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {Image} from 'react-native';
 
-import {useAuthSignIn} from '@domain';
+import {useAuthGoogleSignIn, useAuthSignIn} from '@domain';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {google} from '@images';
 import {
@@ -25,10 +25,14 @@ import {Row} from './components/Row/Row';
 import {loginSchema, TypeLoginSchema} from './LoginSchema';
 
 export function Login({navigation}: AuthScreenProps<'Login'>) {
-  const [auth, setAuth] = useState<User | null>(null);
   const {showToast} = useToastService();
+  const authGoogle = useAuthGoogleSignIn({
+    onError: message => {
+      showToast({message, type: 'error'});
+    },
+  });
 
-  const {isLoading, signIn} = useAuthSignIn({
+  const authForm = useAuthSignIn({
     onError: message => {
       showToast({message, type: 'error'});
     },
@@ -43,16 +47,8 @@ export function Login({navigation}: AuthScreenProps<'Login'>) {
     mode: 'onChange',
   });
 
-  async function handleGoogleSignIn() {
-    try {
-      await GoogleSignin.hasPlayServices();
-      const response = await GoogleSignin.signIn();
-      if (isSuccessResponse(response)) {
-        console.log(response.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  function signInWithGoogle() {
+    authGoogle.signInWithGoogle();
   }
 
   function navigateToForgetMyPassword() {
@@ -60,7 +56,7 @@ export function Login({navigation}: AuthScreenProps<'Login'>) {
   }
 
   function submitForm(props: TypeLoginSchema) {
-    signIn(props);
+    authForm.signIn(props);
   }
 
   function navigateToSignUp() {
@@ -96,7 +92,7 @@ export function Login({navigation}: AuthScreenProps<'Login'>) {
         Esqueci minha senha
       </Text>
       <Button
-        loading={isLoading}
+        loading={authForm.isLoading}
         title="Entrar"
         mt="s48"
         disabled={!formState.isValid}
@@ -104,15 +100,12 @@ export function Login({navigation}: AuthScreenProps<'Login'>) {
       />
       <Row />
 
-      <Button
-        title="Criar uma conta"
-        mb="s40"
-        onPress={navigateToSignUp}
-      />
+      <Button title="Criar uma conta" mb="s40" onPress={navigateToSignUp} />
       <Button
         preset="google"
+        loading={authGoogle.isLoading}
         title="Entrar com o google"
-        onPress={handleGoogleSignIn}
+        onPress={signInWithGoogle}
         rightComponent={
           <Image
             source={google}
