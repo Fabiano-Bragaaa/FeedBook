@@ -1,5 +1,6 @@
 import {db} from '@services';
 import {startOfDay, endOfDay} from 'date-fns';
+import {toZonedTime, format} from 'date-fns-tz';
 import {
   addDoc,
   collection,
@@ -156,6 +157,26 @@ async function update(
   };
 }
 
+async function getTransactionDates(): Promise<string[]> {
+  const snapshot = await getDocs(collection(db, 'transactions'));
+
+  const dateSet = new Set<string>();
+
+  snapshot.forEach(doc => {
+    const date = doc.data().date?.toDate?.();
+    if (date) {
+      const zonedDate = toZonedTime(date, 'America/Sao_Paulo');
+
+      const formatted = format(zonedDate, 'yyyy-MM-dd', {
+        timeZone: 'America/Sao_Paulo',
+      });
+      dateSet.add(formatted);
+    }
+  });
+
+  return Array.from(dateSet);
+}
+
 export const cashFlowFirebase = {
   getList,
   create,
@@ -164,4 +185,5 @@ export const cashFlowFirebase = {
   getTotalExpenses,
   getTotalIncome,
   getItemById,
+  getTransactionDates,
 };

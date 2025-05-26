@@ -64,6 +64,12 @@ async function update(
   return data;
 }
 
+async function getTransactionDates(): Promise<string[]> {
+  const data = await cashFlowFirebase.getTransactionDates();
+
+  return data;
+}
+
 export const cashFlowService = {
   getList,
   create,
@@ -72,4 +78,5 @@ export const cashFlowService = {
   getTotalIncome,
   getItemById,
   update,
+  getTransactionDates,
 };

@@ -96,6 +96,6 @@ export function Home({navigation}: AppTabScreenProps<'Home'>) {
 
 const $screen: StyleProp<ViewStyle> = {
   paddingBottom: 0,
-  paddingTop: 0,
+  paddingTop: 30,
   flex: 1,
 };

@@ -1,6 +1,7 @@
-import {useState} from 'react';
+import {useEffect, useMemo, useState} from 'react';
 import {StyleProp, ViewStyle} from 'react-native';
 
+import {cashFlowService} from '@domain';
 import {ptBR} from '@utils';
 import {Calendar, DateData, LocaleConfig} from 'react-native-calendars';
 
@@ -12,7 +13,47 @@ LocaleConfig.defaultLocale = 'pt-br';
 
 export function HomeCalendar() {
   const [day, setDay] = useState<DateData>();
+  const [markedDates, setMarkedDates] = useState<string[]>([]);
   const {colors} = useAppTheme();
+
+  useEffect(() => {
+    async function loadMarkedDates() {
+      const dates = await cashFlowService.getTransactionDates();
+      setMarkedDates(dates);
+    }
+
+    loadMarkedDates();
+  }, []);
+
+  const marked = useMemo(() => {
+    const result: Record<string, any> = {};
+
+    markedDates.forEach(date => {
+      result[date] = {
+        marked: true,
+        dotColor: colors.primary,
+      };
+    });
+
+    if (day) {
+      const selectedDate = result[day.dateString] || {};
+      result[day.dateString] = {
+        ...selectedDate,
+        selected: true,
+        selectedColor: colors.backgroundContranst,
+        selectedTextColor: colors.background,
+      };
+    }
+
+    return result;
+  }, [
+    markedDates,
+    day,
+    colors.primary,
+    colors.backgroundContranst,
+    colors.background,
+  ]);
+
   return (
     <Calendar
       style={$calendar}
@@ -29,11 +70,7 @@ export function HomeCalendar() {
       }}
       onDayPress={setDay}
       hideExtraDays
-      markedDates={
-        day && {
-          [day.dateString]: {selected: true},
-        }
-      }
+      markedDates={marked}
     />
   );
 }

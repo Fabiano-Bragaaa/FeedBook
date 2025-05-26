@@ -5,7 +5,7 @@ export const signUpSchema = z
     fullName: z
       .string()
       .min(5, 'nome muito curto')
-      .max(50, 'nome muito longo.')
+      .max(15, 'nome muito longo.')
       .transform(value => {
         return value
           .split(' ')
