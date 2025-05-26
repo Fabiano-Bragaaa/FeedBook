@@ -17,6 +17,7 @@ import {Box, CashList, Option, Screen} from '@components';
 import {useAppTheme} from '@hooks';
 import {AppTabScreenProps} from '@routes';
 
+import {HomeCalendar} from './components/HomeCalendar';
 import {HomeEmpty} from './components/HomeEmpty';
 import {HomeHeader} from './components/HomeHeader';
 
@@ -70,6 +71,7 @@ export function Home({navigation}: AppTabScreenProps<'Home'>) {
 
   return (
     <Screen style={$screen}>
+      <HomeCalendar />
       <FlatList
         ref={flatListRef}
         data={cashList}

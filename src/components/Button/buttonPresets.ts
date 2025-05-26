@@ -22,9 +22,10 @@ export const buttonPresets: Record<
     },
     disabled: {
       container: {
-        backgroundColor: 'gray4',
+        borderWidth: 1,
+        borderColor: 'backgroundContranst',
       },
-      content: 'gray2',
+      content: 'backgroundContranst',
     },
   },
   outline: {
@@ -49,14 +50,14 @@ export const buttonPresets: Record<
         borderWidth: 1,
         borderColor: 'gray2',
       },
-      content: 'gray2',
+      content: 'backgroundContranst',
     },
     disabled: {
       container: {
         borderWidth: 1,
         borderColor: 'gray4',
       },
-      content: 'gray2',
+      content: 'backgroundContranst',
     },
   },
   google: {

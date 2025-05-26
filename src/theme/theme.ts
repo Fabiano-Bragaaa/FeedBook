@@ -28,8 +28,8 @@ export const theme = createTheme({
 
     buttonPrimary: palette.carrotSecondary,
 
-    background: palette.grayWhite,
-    backgroundContranst: palette.grayBlack,
+    background: palette.grayBlack,
+    backgroundContranst: palette.grayWhite,
 
     error: palette.redError,
     errorLight: palette.redErrorLight,

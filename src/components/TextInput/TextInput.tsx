@@ -6,6 +6,8 @@ import {
   TextStyle,
 } from 'react-native';
 
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+
 import {Box, BoxProps} from '@components';
 import {useAppTheme} from '@hooks';
 
@@ -25,9 +27,8 @@ export function TextInput({
   boxProps,
   ...rnTextInputProps
 }: TextInputProps) {
-  const {colors} = useAppTheme();
-
   const inputRef = useRef<RNTextInput>(null);
+  const {colors} = useAppTheme();
 
   function focusInput() {
     inputRef.current?.focus();
@@ -42,6 +43,15 @@ export function TextInput({
     p: 's12',
   };
 
+  const $textInputStyle: TextStyle = {
+    padding: 0,
+    fontFamily: $fontFamily.medium,
+    ...$fontSizes.paragraphMedium,
+    color: colors.backgroundContranst,
+    flexGrow: 1,
+    flexShrink: 1,
+  };
+
   return (
     <Box {...boxProps}>
       <Pressable onPress={focusInput}>
@@ -53,7 +63,7 @@ export function TextInput({
             <RNTextInput
               autoCapitalize="none"
               ref={inputRef}
-              placeholderTextColor={colors.gray2}
+              placeholderTextColor={colors.backgroundContranst}
               {...rnTextInputProps}
               style={$textInputStyle}
             />
@@ -73,11 +83,3 @@ export function TextInput({
     </Box>
   );
 }
-
-const $textInputStyle: TextStyle = {
-  padding: 0,
-  fontFamily: $fontFamily.regular,
-  ...$fontSizes.paragraphMedium,
-  flexGrow: 1,
-  flexShrink: 1,
-};

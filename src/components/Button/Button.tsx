@@ -40,7 +40,7 @@ export function Button({
       : {};
 
   const $selectedTextColor: themeColor | undefined =
-    preset === 'noSelected' && selected && !disabled ? 'background' : undefined;
+    preset === 'noSelected' && selected && !disabled ? 'backgroundContranst' : undefined;
 
   return (
     <TouchableOpacityBox

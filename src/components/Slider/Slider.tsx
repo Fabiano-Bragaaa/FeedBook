@@ -26,10 +26,10 @@ export function Slider({bg, title, amount}: SliderProps) {
 
   return (
     <Box {...$wrapper}>
-      <Text preset="headingSmall" color="background">
+      <Text preset="headingSmall" color="backgroundContranst">
         {title}
       </Text>
-      <Text preset="headingMedium" color="background">
+      <Text preset="headingMedium" color="backgroundContranst">
         {formatCurrency(amount)}
       </Text>
     </Box>

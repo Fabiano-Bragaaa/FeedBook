@@ -1,5 +1,7 @@
 import 'react-native-gesture-handler';
 
+import {StatusBar} from 'react-native';
+
 import {CLIENT_ID} from '@env';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {ToastProvider} from '@services';
@@ -21,6 +23,11 @@ GoogleSignin.configure({
 function App(): React.JSX.Element {
   return (
     <QueryClientProvider client={queryClient}>
+      <StatusBar
+        backgroundColor="transparent"
+        translucent
+        barStyle="light-content"
+      />
       <GestureHandlerRootView style={{flex: 1}}>
         <SafeAreaProvider>
           <ThemeProvider theme={theme}>
