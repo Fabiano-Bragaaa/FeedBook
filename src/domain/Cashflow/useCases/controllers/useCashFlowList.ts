@@ -1,4 +1,4 @@
-import {useRef} from 'react';
+import {useRef, useState} from 'react';
 
 import {useNavigation} from '@react-navigation/native';
 import {SwipeableMethods} from 'react-native-gesture-handler/lib/typescript/components/ReanimatedSwipeable';
@@ -7,6 +7,7 @@ import {useCashFlowRemove} from '../mutations/useCashFlowRemove';
 import {useGetList} from '../queries';
 
 export function useCashFlowList(date?: Date) {
+  const [visible, setVisible] = useState<boolean>(false);
   const currentDate = date || new Date();
   const {cashList, fetchNextPage, isError, isLoading, refetch} =
     useGetList(currentDate);
@@ -50,5 +51,7 @@ export function useCashFlowList(date?: Date) {
     refresh: refetch,
     fetchNextPage: fetchNextPage,
     onSwipeableOpen,
+    visible,
+    setVisible,
   };
 }

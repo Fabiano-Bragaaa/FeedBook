@@ -1,12 +1,16 @@
 import {useAuthSignOut} from '@domain';
 import {useAuthCredentials, useToastService} from '@services';
 
-import {Box, BoxProps, Button, Text} from '@components';
+import {Box, BoxProps, Button, Icon, Text} from '@components';
 import {useAppSafeArea} from '@hooks';
 
 import {HomeSlider} from './HomeSlide';
 
-export function HomeHeader() {
+type Props = {
+  openModal: () => void;
+};
+
+export function HomeHeader({openModal}: Props) {
   const {top} = useAppSafeArea();
   const {showToast} = useToastService();
 
@@ -31,6 +35,9 @@ export function HomeHeader() {
         />
       </Box>
       <HomeSlider />
+      <Box mt="s24">
+        <Icon name="camera" size={25} onPress={openModal} />
+      </Box>
     </Box>
   );
 }

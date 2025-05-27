@@ -2,6 +2,7 @@ import {useRef} from 'react';
 import {
   FlatList,
   ListRenderItemInfo,
+  Modal,
   RefreshControl,
   StyleProp,
   ViewStyle,
@@ -22,8 +23,16 @@ import {HomeEmpty} from './components/HomeEmpty';
 import {HomeHeader} from './components/HomeHeader';
 
 export function Home({navigation}: AppTabScreenProps<'Home'>) {
-  const {cashList, onSwipeableOpen, refresh, fetchNextPage, error, loading} =
-    useCashFlowList();
+  const {
+    cashList,
+    onSwipeableOpen,
+    refresh,
+    fetchNextPage,
+    error,
+    loading,
+    setVisible,
+    visible,
+  } = useCashFlowList();
 
   const {colors} = useAppTheme();
 
@@ -71,7 +80,6 @@ export function Home({navigation}: AppTabScreenProps<'Home'>) {
 
   return (
     <Screen style={$screen}>
-      <HomeCalendar />
       <FlatList
         ref={flatListRef}
         data={cashList}
@@ -85,11 +93,14 @@ export function Home({navigation}: AppTabScreenProps<'Home'>) {
         refreshing={loading}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{flex: cashList.length === 0 ? 1 : undefined}}
-        ListHeaderComponent={<HomeHeader />}
+        ListHeaderComponent={<HomeHeader openModal={() => setVisible(true)} />}
         ListEmptyComponent={
           <HomeEmpty error={error} loading={loading} refetch={refresh} />
         }
       />
+      <Modal visible={visible} animationType="fade" transparent>
+        <HomeCalendar setVisible={() => setVisible(!visible)} />
+      </Modal>
     </Screen>
   );
 }

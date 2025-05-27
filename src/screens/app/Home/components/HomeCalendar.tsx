@@ -1,17 +1,30 @@
 import {useEffect, useMemo, useState} from 'react';
-import {StyleProp, ViewStyle} from 'react-native';
+import {
+  Dimensions,
+  StyleProp,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 
 import {cashFlowService} from '@domain';
 import {ptBR} from '@utils';
 import {Calendar, DateData, LocaleConfig} from 'react-native-calendars';
 
+import {Box, Button} from '@components';
 import {useAppTheme} from '@hooks';
 
 LocaleConfig.locales['pt-br'] = ptBR;
 
 LocaleConfig.defaultLocale = 'pt-br';
 
-export function HomeCalendar() {
+const {height} = Dimensions.get('window');
+
+type Props = {
+  setVisible: () => void;
+};
+
+export function HomeCalendar({setVisible}: Props) {
   const [day, setDay] = useState<DateData>();
   const [markedDates, setMarkedDates] = useState<string[]>([]);
   const {colors} = useAppTheme();
@@ -40,8 +53,8 @@ export function HomeCalendar() {
       result[day.dateString] = {
         ...selectedDate,
         selected: true,
-        selectedColor: colors.backgroundContranst,
-        selectedTextColor: colors.background,
+        selectedColor: colors.background,
+        selectedTextColor: colors.backgroundContranst,
       };
     }
 
@@ -55,23 +68,36 @@ export function HomeCalendar() {
   ]);
 
   return (
-    <Calendar
-      style={$calendar}
-      headerStyle={$headerCalendar}
-      theme={{
-        textMonthFontSize: 18,
-        monthTextColor: colors.backgroundContranst,
-        todayTextColor: colors.primary,
-        selectedDayBackgroundColor: colors.backgroundContranst,
-        selectedDayTextColor: colors.background,
-        arrowColor: colors.backgroundContranst,
-        calendarBackground: 'transparent',
-        textDayStyle: {color: colors.backgroundContranst},
-      }}
-      onDayPress={setDay}
-      hideExtraDays
-      markedDates={marked}
-    />
+    <View style={{flex: 1, justifyContent: 'flex-end'}}>
+      <TouchableOpacity
+        style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.6)'}}
+        onPress={setVisible}
+      />
+      <Box
+        justifyContent="center"
+        bg="backgroundContranst"
+        borderTopLeftRadius="s12"
+        borderTopRightRadius="s12"
+        paddingHorizontal="s14"
+        gap="s16"
+        minHeight={height * 0.45}>
+        <Calendar
+          style={$calendar}
+          headerStyle={$headerCalendar}
+          theme={{
+            textMonthFontSize: 18,
+            monthTextColor: colors.background,
+            todayTextColor: colors.primary,
+            arrowColor: colors.background,
+            calendarBackground: 'transparent',
+          }}
+          onDayPress={setDay}
+          hideExtraDays
+          markedDates={marked}
+        />
+        <Button title="Selecionar" mb="s20" />
+      </Box>
+    </View>
   );
 }
 
