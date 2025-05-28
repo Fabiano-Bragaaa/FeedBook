@@ -7,11 +7,15 @@ import {
   ViewStyle,
 } from 'react-native';
 
-import {cashFlowService} from '@domain';
+import {
+  cashFlowService,
+  useCashFlowDate,
+  useGetTransactionDates,
+} from '@domain';
 import {ptBR} from '@utils';
 import {Calendar, DateData, LocaleConfig} from 'react-native-calendars';
 
-import {Box, Button} from '@components';
+import {ActivityIndicator, Box, Button} from '@components';
 import {useAppTheme} from '@hooks';
 
 LocaleConfig.locales['pt-br'] = ptBR;
@@ -26,55 +30,19 @@ type Props = {
 };
 
 export function HomeCalendar({setVisible, setDate}: Props) {
-  const [day, setDay] = useState<DateData>();
-  const [markedDates, setMarkedDates] = useState<string[]>([]);
+  const {handleFilterDate, isLoading, marked, setDay} = useCashFlowDate({
+    setVisible,
+    setDate,
+  });
+
   const {colors} = useAppTheme();
 
-  console.log('dia', day);
-
-  useEffect(() => {
-    async function loadMarkedDates() {
-      const dates = await cashFlowService.getTransactionDates();
-      setMarkedDates(dates);
-    }
-
-    loadMarkedDates();
-  }, []);
-
-  const marked = useMemo(() => {
-    const result: Record<string, any> = {};
-
-    markedDates.forEach(date => {
-      result[date] = {
-        marked: true,
-        dotColor: colors.primary,
-      };
-    });
-
-    if (day) {
-      const selectedDate = result[day.dateString] || {};
-      result[day.dateString] = {
-        ...selectedDate,
-        selected: true,
-        selectedColor: colors.background,
-        selectedTextColor: colors.backgroundContranst,
-      };
-    }
-
-    return result;
-  }, [
-    markedDates,
-    day,
-    colors.primary,
-    colors.backgroundContranst,
-    colors.background,
-  ]);
-
-  function handleFilterDate() {
-    if (day) {
-      setDate(new Date(day.dateString));
-      setVisible();
-    }
+  if (isLoading) {
+    return (
+      <Box flex={1} alignItems="center" justifyContent="center">
+        <ActivityIndicator size={20} />
+      </Box>
+    );
   }
 
   return (

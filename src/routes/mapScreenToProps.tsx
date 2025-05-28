@@ -23,10 +23,4 @@ export const mapScreenToProps: Record<
       unfocused: 'newPost',
     },
   },
-  Profile: {
-    icon: {
-      focused: 'profileFill',
-      unfocused: 'profile',
-    },
-  },
 };

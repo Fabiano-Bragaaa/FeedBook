@@ -3,14 +3,13 @@ import {
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
 
-import {Home, New, Profile} from '@screens';
+import {Home, New} from '@screens';
 
 import {AppTabBar} from './AppTabBar';
 
 export type AppTabBottomTabParamList = {
   Home: undefined;
   New: undefined;
-  Profile: undefined;
 };
 
 const {Navigator, Screen} =
@@ -25,7 +24,6 @@ export function AppTabNavigator() {
     <Navigator tabBar={renderTabBar} screenOptions={{headerShown: false}}>
       <Screen name="Home" component={Home} />
       <Screen name="New" component={New} />
-      <Screen name="Profile" component={Profile} />
     </Navigator>
   );
 }
