@@ -22,12 +22,15 @@ const {height} = Dimensions.get('window');
 
 type Props = {
   setVisible: () => void;
+  setDate: (day: Date) => void;
 };
 
-export function HomeCalendar({setVisible}: Props) {
+export function HomeCalendar({setVisible, setDate}: Props) {
   const [day, setDay] = useState<DateData>();
   const [markedDates, setMarkedDates] = useState<string[]>([]);
   const {colors} = useAppTheme();
+
+  console.log('dia', day);
 
   useEffect(() => {
     async function loadMarkedDates() {
@@ -67,6 +70,13 @@ export function HomeCalendar({setVisible}: Props) {
     colors.background,
   ]);
 
+  function handleFilterDate() {
+    if (day) {
+      setDate(new Date(day.dateString));
+      setVisible();
+    }
+  }
+
   return (
     <View style={{flex: 1, justifyContent: 'flex-end'}}>
       <TouchableOpacity
@@ -95,7 +105,7 @@ export function HomeCalendar({setVisible}: Props) {
           hideExtraDays
           markedDates={marked}
         />
-        <Button title="Selecionar" mb="s20" />
+        <Button title="Selecionar" mb="s20" onPress={handleFilterDate} />
       </Box>
     </View>
   );

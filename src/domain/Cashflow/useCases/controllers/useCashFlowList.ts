@@ -6,10 +6,13 @@ import {SwipeableMethods} from 'react-native-gesture-handler/lib/typescript/comp
 import {useCashFlowRemove} from '../mutations/useCashFlowRemove';
 import {useGetList} from '../queries';
 
-export function useCashFlowList(date?: Date) {
+export function useCashFlowList() {
+  const [date, setDate] = useState<Date>();
+  console.log('data no meu useCashFlow --->', date);
+
   const [visible, setVisible] = useState<boolean>(false);
   const currentDate = date || new Date();
-  const {cashList, fetchNextPage, isError, isLoading, refetch} =
+  const {cashList, fetchNextPage, isError, isLoading, refetch, isFetching} =
     useGetList(currentDate);
   const {mutate} = useCashFlowRemove({
     onSuccess: () => {
@@ -46,12 +49,13 @@ export function useCashFlowList(date?: Date) {
 
   return {
     cashList,
-    loading: isLoading,
+    loading: isLoading || isFetching,
     error: isError,
     refresh: refetch,
     fetchNextPage: fetchNextPage,
     onSwipeableOpen,
     visible,
     setVisible,
+    setDate,
   };
 }

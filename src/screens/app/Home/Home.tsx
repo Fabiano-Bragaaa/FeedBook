@@ -32,6 +32,7 @@ export function Home({navigation}: AppTabScreenProps<'Home'>) {
     loading,
     setVisible,
     visible,
+    setDate,
   } = useCashFlowList();
 
   const {colors} = useAppTheme();
@@ -99,7 +100,10 @@ export function Home({navigation}: AppTabScreenProps<'Home'>) {
         }
       />
       <Modal visible={visible} animationType="fade" transparent>
-        <HomeCalendar setVisible={() => setVisible(!visible)} />
+        <HomeCalendar
+          setVisible={() => setVisible(!visible)}
+          setDate={day => setDate(day)}
+        />
       </Modal>
     </Screen>
   );

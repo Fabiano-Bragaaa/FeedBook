@@ -7,26 +7,28 @@ interface Props {
 }
 
 export function HomeEmpty({error, loading, refetch}: Props) {
-  let component = (
-    <Text bold preset="paragraphMedium">
-      Não há nada na sua lista
-    </Text>
-  );
-
   if (loading) {
-    component = <ActivityIndicator color="primary" />;
+    return (
+      <Box flex={1} justifyContent="center" alignItems="center">
+        <ActivityIndicator color="primary" />
+      </Box>
+    );
   }
 
   if (error) {
-    <>
-      <Text>Não foi possivel carregar o feed</Text>
-      <Button title="Recarregar" preset="outline" onPress={refetch} />
-    </>;
+    return (
+      <Box flex={1} justifyContent="center" alignItems="center">
+        <Text>Não foi possível carregar o feed</Text>
+        <Button title="Recarregar" preset="outline" onPress={refetch} />
+      </Box>
+    );
   }
 
   return (
     <Box flex={1} justifyContent="center" alignItems="center">
-      {component}
+      <Text bold preset="paragraphMedium">
+        Não há nada na sua lista
+      </Text>
     </Box>
   );
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import {QueryKeys} from '@infra';
 import {useInfiniteQuery} from '@tanstack/react-query';
@@ -10,6 +10,7 @@ export type useCashFlowListResult = {
   cashList: CashFlow[];
   isError: boolean | null;
   isLoading: boolean;
+  isFetching: boolean;
   refetch: () => void;
   fetchNextPage: () => void;
 };
@@ -19,13 +20,16 @@ export function useGetList(date: Date): useCashFlowListResult {
 
   console.log('data ====', date);
 
-  const {isLoading, isError, refetch, fetchNextPage, data} = useInfiniteQuery({
-    queryKey: [QueryKeys.MovimentationList],
-    queryFn: ({pageParam}) => cashFlowService.getList(pageParam, date),
-    getNextPageParam: ({hasNextPage, lastVisible}) => {
-      hasNextPage ? lastVisible : null;
-    },
-  });
+  const formattedDate = date.toISOString().split('T')[0];
+
+  const {isLoading, isFetching, isError, refetch, fetchNextPage, data} =
+    useInfiniteQuery({
+      queryKey: [QueryKeys.MovimentationList, formattedDate],
+      queryFn: ({pageParam}) => cashFlowService.getList(pageParam, date),
+      getNextPageParam: ({hasNextPage, lastVisible}) => {
+        hasNextPage ? lastVisible : null;
+      },
+    });
 
   useEffect(() => {
     if (data) {
@@ -39,6 +43,7 @@ export function useGetList(date: Date): useCashFlowListResult {
   return {
     cashList,
     isLoading,
+    isFetching: isFetching && !isLoading,
     isError,
     refetch,
     fetchNextPage,
