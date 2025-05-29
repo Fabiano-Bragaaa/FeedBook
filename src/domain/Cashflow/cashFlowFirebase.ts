@@ -1,4 +1,5 @@
 import {db} from '@services';
+import {convertToUtc} from '@utils';
 import {startOfDay, endOfDay} from 'date-fns';
 import {toZonedTime, format} from 'date-fns-tz';
 import {
@@ -59,7 +60,7 @@ async function getList(
 
 async function create(cashFlow: Omit<CashFlow, 'id'>): Promise<CashFlow> {
   const date = cashFlow.date
-    ? toZonedTime(cashFlow.date, 'America/Sao_Paulo')
+    ? convertToUtc(cashFlow.date, 'America/Sao_Paulo')
     : new Date();
 
   const docRef = await addDoc(collection(db, 'transactions'), {
