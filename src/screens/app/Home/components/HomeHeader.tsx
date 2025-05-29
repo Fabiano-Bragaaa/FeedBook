@@ -36,7 +36,7 @@ export function HomeHeader({openModal}: Props) {
       </Box>
       <HomeSlider />
       <Box mt="s24">
-        <Icon name="camera" size={25} onPress={openModal} />
+        <Icon name="calendar" size={25} onPress={openModal} />
       </Box>
     </Box>
   );
