@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 
 import {QueryKeys} from '@infra';
+import {useAuthCredentials} from '@services';
 import {useInfiniteQuery} from '@tanstack/react-query';
 
 import {cashFlowService} from '../../cashFlowService';
@@ -16,6 +17,7 @@ export type useCashFlowListResult = {
 };
 
 export function useGetList(date: Date): useCashFlowListResult {
+  const {userCredentials} = useAuthCredentials();
   const [cashList, setCashList] = useState<CashFlow[]>([]);
 
   console.log('data ====', date);
@@ -25,10 +27,12 @@ export function useGetList(date: Date): useCashFlowListResult {
   const {isLoading, isFetching, isError, refetch, fetchNextPage, data} =
     useInfiniteQuery({
       queryKey: [QueryKeys.MovimentationList, formattedDate],
-      queryFn: ({pageParam}) => cashFlowService.getList(pageParam, date),
+      queryFn: ({pageParam}) =>
+        cashFlowService.getList(userCredentials!.uid, pageParam, date),
       getNextPageParam: ({hasNextPage, lastVisible}) => {
         hasNextPage ? lastVisible : null;
       },
+      enabled: !!userCredentials?.uid,
     });
 
   useEffect(() => {

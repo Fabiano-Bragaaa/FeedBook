@@ -10,6 +10,7 @@ import {
 
 import {CashFlow, useCashFlowList} from '@domain';
 import {useScrollToTop} from '@react-navigation/native';
+import {useAuthCredentials} from '@services';
 import Swipeable, {
   SwipeableMethods,
 } from 'react-native-gesture-handler/ReanimatedSwipeable';
@@ -36,6 +37,9 @@ export function Home({navigation}: AppTabScreenProps<'Home'>) {
   } = useCashFlowList();
 
   const {colors} = useAppTheme();
+  const {userCredentials} = useAuthCredentials();
+
+  console.log('credentiais do usuario', userCredentials);
 
   const flatListRef = useRef<FlatList<CashFlow>>(null);
   useScrollToTop(flatListRef);

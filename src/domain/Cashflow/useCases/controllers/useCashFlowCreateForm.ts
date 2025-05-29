@@ -1,7 +1,7 @@
 import {useState} from 'react';
 
 import {zodResolver} from '@hookform/resolvers/zod';
-import {useDay} from '@services';
+import {useAuthCredentials, useDay} from '@services';
 import {CashFlowSchema, TypeCashFlowSchema} from '@utils';
 import {useForm} from 'react-hook-form';
 
@@ -9,6 +9,7 @@ import {useCashFlowCreate} from '../mutations';
 
 export function useCashFlowCreateForm() {
   const {mutate, isLoading} = useCashFlowCreate();
+  const {userCredentials} = useAuthCredentials();
   const {day} = useDay();
   const [selectedType, setSelectedType] = useState<'expense' | 'income'>(
     'income',
@@ -27,12 +28,17 @@ export function useCashFlowCreateForm() {
 
   async function submitForm({amount, description}: TypeCashFlowSchema) {
     try {
+      if (!userCredentials?.uid) {
+        return;
+      }
+
       const selectedDate = day ? new Date(day.dateString) : new Date();
       await mutate({
         amount,
         date: selectedDate,
         description,
         type: selectedType,
+        userId: userCredentials.uid,
       });
       console.log('cadastro feito');
       reset();

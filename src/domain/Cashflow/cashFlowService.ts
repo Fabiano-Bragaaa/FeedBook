@@ -6,6 +6,7 @@ import {CashFlow} from './cashFlowTypes';
 const PAGE_LIMIT = 10;
 
 async function getList(
+  userId: string,
   lastVisible?: QueryDocumentSnapshot<DocumentData>,
   date?: Date,
 ): Promise<{
@@ -15,6 +16,7 @@ async function getList(
 }> {
   const cashFlowList = await cashFlowFirebase.getList(
     PAGE_LIMIT,
+    userId,
     lastVisible,
     date,
   );
@@ -22,14 +24,14 @@ async function getList(
   return cashFlowList;
 }
 
-async function getTotalExpenses(date?: Date): Promise<number> {
-  const totalExpenses = await cashFlowFirebase.getTotalExpenses(date);
+async function getTotalExpenses(userId: string, date?: Date): Promise<number> {
+  const totalExpenses = await cashFlowFirebase.getTotalExpenses(userId, date);
 
   return totalExpenses;
 }
 
-async function getTotalIncome(date?: Date): Promise<number> {
-  const totalIncome = await cashFlowFirebase.getTotalIncome(date);
+async function getTotalIncome(userId: string, date?: Date): Promise<number> {
+  const totalIncome = await cashFlowFirebase.getTotalIncome(userId, date);
 
   return totalIncome;
 }
@@ -64,8 +66,8 @@ async function update(
   return data;
 }
 
-async function getTransactionDates(): Promise<string[]> {
-  const data = await cashFlowFirebase.getTransactionDates();
+async function getTransactionDates(userId: string): Promise<string[]> {
+  const data = await cashFlowFirebase.getTransactionDates(userId);
 
   return data;
 }

@@ -1,4 +1,4 @@
-import {db} from '@services';
+import {db, useAuthCredentials} from '@services';
 import {convertToUtc} from '@utils';
 import {startOfDay, endOfDay} from 'date-fns';
 import {toZonedTime, format} from 'date-fns-tz';
@@ -23,6 +23,7 @@ import {CashFlow} from './cashFlowTypes';
 
 async function getList(
   pageLimit: number,
+  userId: string,
   lastVisible?: QueryDocumentSnapshot<DocumentData>,
   date?: Date,
 ): Promise<{
@@ -32,10 +33,13 @@ async function getList(
 }> {
   const targetDate = date ?? new Date();
 
+  const zonedDate = convertToUtc(targetDate, 'America/Sao_Paulo');
+
   const transactionsQuery = query(
     collection(db, 'transactions'),
-    where('date', '>=', startOfDay(targetDate)),
-    where('date', '<=', endOfDay(targetDate)),
+    where('userId', '==', userId),
+    where('date', '>=', startOfDay(zonedDate)),
+    where('date', '<=', endOfDay(zonedDate)),
     orderBy('date', 'desc'),
     limit(pageLimit),
     ...(lastVisible ? [startAfter(lastVisible)] : []),
@@ -49,6 +53,7 @@ async function getList(
     amount: doc.data().amount,
     description: doc.data().description,
     date: doc.data().date?.toDate?.() ?? new Date(),
+    userId: doc.data().userId,
   }));
 
   return {
@@ -80,14 +85,17 @@ async function remove(id: string): Promise<void> {
   await deleteDoc(docRef);
 }
 
-async function getTotalExpenses(date?: Date): Promise<number> {
+async function getTotalExpenses(userId: string, date?: Date): Promise<number> {
   const targetDate = date ?? new Date();
+
+  const zonedDate = convertToUtc(targetDate, 'America/Sao_Paulo');
 
   const queryExpenses = query(
     collection(db, 'transactions'),
+    where('userId', '==', userId),
     where('type', '==', 'expense'),
-    where('date', '>=', startOfDay(targetDate)),
-    where('date', '<=', endOfDay(targetDate)),
+    where('date', '>=', startOfDay(zonedDate)),
+    where('date', '<=', endOfDay(zonedDate)),
   );
 
   const querySnapshot = await getDocs(queryExpenses);
@@ -102,14 +110,17 @@ async function getTotalExpenses(date?: Date): Promise<number> {
   return total;
 }
 
-async function getTotalIncome(date?: Date): Promise<number> {
+async function getTotalIncome(userId: string, date?: Date): Promise<number> {
   const targetDate = date ?? new Date();
+
+  const zonedDate = convertToUtc(targetDate, 'America/Sao_Paulo');
 
   const queryIncome = query(
     collection(db, 'transactions'),
+    where('userId', '==', userId),
     where('type', '==', 'income'),
-    where('date', '>=', startOfDay(targetDate)),
-    where('date', '<=', endOfDay(targetDate)),
+    where('date', '>=', startOfDay(zonedDate)),
+    where('date', '<=', endOfDay(zonedDate)),
   );
 
   const querySnapshot = await getDocs(queryIncome);
@@ -133,6 +144,7 @@ async function getItemById(id: string): Promise<CashFlow> {
     type: data.type,
     amount: data.amount,
     description: data.description,
+    userId: data.userId,
     date: data.date.toDate(),
   };
 }
@@ -158,12 +170,18 @@ async function update(
     type: data.type,
     amount: data.amount,
     description: data.description,
+    userId: data.userId,
     date: data.date.toDate(),
   };
 }
 
-async function getTransactionDates(): Promise<string[]> {
-  const snapshot = await getDocs(collection(db, 'transactions'));
+async function getTransactionDates(userId: string): Promise<string[]> {
+  const transactionsQuery = await query(
+    collection(db, 'transactions'),
+    where('userId', '==', userId),
+  );
+
+  const snapshot = await getDocs(transactionsQuery);
 
   const dateSet = new Set<string>();
 
