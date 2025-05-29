@@ -1,5 +1,6 @@
 import {useEffect, useMemo, useState} from 'react';
 
+import { useDay } from '@services';
 import {DateData} from 'react-native-calendars';
 
 import {useAppTheme} from '@hooks';
@@ -14,7 +15,7 @@ type Props = {
 export function useCashFlowDate({setDate, setVisible}: Props) {
   const {data, isLoading} = useGetTransactionDates();
 
-  const [day, setDay] = useState<DateData>();
+  const {day, setDay} = useDay();
   const [markedDates, setMarkedDates] = useState<string[]>([]);
   const {colors} = useAppTheme();
 

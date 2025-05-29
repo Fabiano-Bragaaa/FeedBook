@@ -5,3 +5,4 @@ export * from './toast/toastType';
 export * from './toast/useToast';
 
 export * from './authCredentials';
+export * from './day';
