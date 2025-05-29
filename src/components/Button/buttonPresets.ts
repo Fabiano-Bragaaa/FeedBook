@@ -22,8 +22,7 @@ export const buttonPresets: Record<
     },
     disabled: {
       container: {
-        borderWidth: 1,
-        borderColor: 'backgroundContranst',
+        backgroundColor: 'gray',
       },
       content: 'backgroundContranst',
     },
