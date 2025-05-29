@@ -1,38 +1,34 @@
 import {useCallback, useState} from 'react';
 
 import {cashFlowService, useCashFlowDate} from '@domain';
+import {QueryKeys} from '@infra';
 import {useFocusEffect} from '@react-navigation/native';
 import {useDay} from '@services';
+import {useQuery} from '@tanstack/react-query';
 
 export function useCashFlowCardHeader() {
   const {day} = useDay();
 
+  const selectedDate = day ? new Date(day.dateString) : undefined;
+
   console.log('dia no slider ===>', day);
 
-  const [expense, setExpense] = useState<number>(0);
-  const [income, setIncome] = useState<number>(0);
-  const [balance, setBalance] = useState<number>(0);
-
-  useFocusEffect(
-    useCallback(() => {
-      async function fetchData() {
-        const selectedDate = day ? new Date(day.dateString) : undefined;
-        const expenseValue = await cashFlowService.getTotalExpenses(
-          selectedDate,
-        );
-        const incomeValue = await cashFlowService.getTotalIncome(selectedDate);
-
-        setExpense(expenseValue);
-        setIncome(incomeValue);
-        setBalance(incomeValue - expenseValue);
-      }
-      fetchData();
-    }, [day]),
-  );
+  const {data} = useQuery({
+    queryKey: [QueryKeys.CashFlowCardHeader, selectedDate],
+    queryFn: async () => {
+      const expense = await cashFlowService.getTotalExpenses(selectedDate);
+      const income = await cashFlowService.getTotalIncome(selectedDate);
+      return {
+        expense,
+        income,
+        balance: income - expense,
+      };
+    },
+  });
 
   return {
-    expense,
-    income,
-    balance,
+    expense: data?.expense ?? 0,
+    income: data?.income ?? 0,
+    balance: data?.balance ?? 0,
   };
 }
