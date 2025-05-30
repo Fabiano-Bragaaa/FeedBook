@@ -1,6 +1,7 @@
 import {useRef, useState} from 'react';
 
 import {useNavigation} from '@react-navigation/native';
+import { convertToUtc } from '@utils';
 import {SwipeableMethods} from 'react-native-gesture-handler/lib/typescript/components/ReanimatedSwipeable';
 
 import {useCashFlowRemove} from '../mutations/useCashFlowRemove';
@@ -11,7 +12,7 @@ export function useCashFlowList() {
   console.log('data no meu useCashFlow --->', date);
 
   const [visible, setVisible] = useState<boolean>(false);
-  const currentDate = date || new Date();
+  const currentDate = date || convertToUtc(new Date(), 'America/Sao_Paulo');
   const {cashList, fetchNextPage, isError, isLoading, refetch, isFetching} =
     useGetList(currentDate);
   const {mutate} = useCashFlowRemove({

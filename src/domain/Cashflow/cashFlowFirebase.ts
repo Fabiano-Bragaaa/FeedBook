@@ -31,7 +31,7 @@ async function getList(
   lastVisible?: QueryDocumentSnapshot<DocumentData>;
   hasNextPage: boolean;
 }> {
-  const targetDate = date ?? new Date();
+  const targetDate = date ?? convertToUtc(new Date(), 'America/Sao_Paulo');
 
   const zonedDate = convertToUtc(targetDate, 'America/Sao_Paulo');
 
@@ -52,7 +52,9 @@ async function getList(
     type: doc.data().type,
     amount: doc.data().amount,
     description: doc.data().description,
-    date: doc.data().date?.toDate?.() ?? new Date(),
+    date:
+      doc.data().date?.toDate?.() ??
+      convertToUtc(new Date(), 'America/Sao_Paulo'),
     userId: doc.data().userId,
   }));
 
@@ -66,7 +68,7 @@ async function getList(
 async function create(cashFlow: Omit<CashFlow, 'id'>): Promise<CashFlow> {
   const date = cashFlow.date
     ? convertToUtc(cashFlow.date, 'America/Sao_Paulo')
-    : new Date();
+    : convertToUtc(new Date(), 'America/Sao_Paulo');
 
   const docRef = await addDoc(collection(db, 'transactions'), {
     ...cashFlow,
@@ -86,7 +88,7 @@ async function remove(id: string): Promise<void> {
 }
 
 async function getTotalExpenses(userId: string, date?: Date): Promise<number> {
-  const targetDate = date ?? new Date();
+  const targetDate = date ?? convertToUtc(new Date(), 'America/Sao_Paulo');
 
   const zonedDate = convertToUtc(targetDate, 'America/Sao_Paulo');
 
@@ -111,7 +113,7 @@ async function getTotalExpenses(userId: string, date?: Date): Promise<number> {
 }
 
 async function getTotalIncome(userId: string, date?: Date): Promise<number> {
-  const targetDate = date ?? new Date();
+  const targetDate = date ?? convertToUtc(new Date(), 'America/Sao_Paulo');
 
   const zonedDate = convertToUtc(targetDate, 'America/Sao_Paulo');
 

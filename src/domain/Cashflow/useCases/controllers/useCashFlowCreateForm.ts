@@ -2,7 +2,7 @@ import {useState} from 'react';
 
 import {zodResolver} from '@hookform/resolvers/zod';
 import {useAuthCredentials, useDay} from '@services';
-import {CashFlowSchema, TypeCashFlowSchema} from '@utils';
+import {CashFlowSchema, convertToUtc, TypeCashFlowSchema} from '@utils';
 import {useForm} from 'react-hook-form';
 
 import {useCashFlowCreate} from '../mutations';
@@ -32,7 +32,9 @@ export function useCashFlowCreateForm() {
         return;
       }
 
-      const selectedDate = day ? new Date(day.dateString) : new Date();
+      const selectedDate = day
+        ? new Date(day.dateString)
+        : convertToUtc(new Date(), 'America/Sao_Paulo');
       await mutate({
         amount,
         date: selectedDate,
