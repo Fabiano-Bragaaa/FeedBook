@@ -1,4 +1,3 @@
-import {useEffect, useMemo, useState} from 'react';
 import {
   Dimensions,
   StyleProp,
@@ -7,15 +6,11 @@ import {
   ViewStyle,
 } from 'react-native';
 
-import {
-  cashFlowService,
-  useCashFlowDate,
-  useGetTransactionDates,
-} from '@domain';
+import {useCashFlowDate} from '@domain';
 import {ptBR} from '@utils';
-import {Calendar, DateData, LocaleConfig} from 'react-native-calendars';
+import {Calendar, LocaleConfig} from 'react-native-calendars';
 
-import {ActivityIndicator, Box, Button} from '@components';
+import {ActivityIndicator, Box, BoxProps, Button} from '@components';
 import {useAppTheme} from '@hooks';
 
 LocaleConfig.locales['pt-br'] = ptBR;
@@ -47,18 +42,8 @@ export function HomeCalendar({setVisible, setDate}: Props) {
 
   return (
     <View style={{flex: 1, justifyContent: 'flex-end'}}>
-      <TouchableOpacity
-        style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.6)'}}
-        onPress={setVisible}
-      />
-      <Box
-        justifyContent="center"
-        bg="backgroundContranst"
-        borderTopLeftRadius="s12"
-        borderTopRightRadius="s12"
-        paddingHorizontal="s14"
-        gap="s16"
-        minHeight={height * 0.45}>
+      <View style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.6)'}} />
+      <Box {...$backgroundCalendar}>
         <Calendar
           style={$calendar}
           headerStyle={$headerCalendar}
@@ -78,6 +63,16 @@ export function HomeCalendar({setVisible, setDate}: Props) {
     </View>
   );
 }
+
+const $backgroundCalendar: BoxProps = {
+  justifyContent: 'center',
+  bg: 'backgroundContranst',
+  borderTopLeftRadius: 's12',
+  borderTopRightRadius: 's12',
+  paddingHorizontal: 's14',
+  gap: 's16',
+  minHeight: height * 0.45,
+};
 
 const $calendar: StyleProp<ViewStyle> = {
   backgroundColor: 'transparent',
