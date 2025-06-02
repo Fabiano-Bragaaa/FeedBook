@@ -25,10 +25,11 @@ type Props = {
 };
 
 export function HomeCalendar({setVisible, setDate}: Props) {
-  const {handleFilterDate, isLoading, marked, setDay} = useCashFlowDate({
-    setVisible,
-    setDate,
-  });
+  const {handleFilterDate, isLoading, marked, setDay, currentDate} =
+    useCashFlowDate({
+      setVisible,
+      setDate,
+    });
 
   const {colors} = useAppTheme();
 
@@ -57,6 +58,7 @@ export function HomeCalendar({setVisible, setDate}: Props) {
           onDayPress={setDay}
           hideExtraDays
           markedDates={marked}
+          current={currentDate}
         />
         <Button title="Selecionar" mb="s20" onPress={handleFilterDate} />
       </Box>

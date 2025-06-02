@@ -1,6 +1,8 @@
 import {useEffect, useMemo, useState} from 'react';
 
 import {useDay} from '@services';
+import {convertToUtc} from '@utils';
+import {format} from 'date-fns';
 
 import {useAppTheme} from '@hooks';
 
@@ -13,6 +15,9 @@ type Props = {
 
 export function useCashFlowDate({setDate, setVisible}: Props) {
   const {data, isLoading} = useGetTransactionDates();
+
+  const today = convertToUtc(new Date(), 'America/Sao_Paulo');
+  const currentDate = format(today, 'yyyy-MM-dd');
 
   const {day, setDay} = useDay();
   const [markedDates, setMarkedDates] = useState<string[]>([]);
@@ -70,6 +75,6 @@ export function useCashFlowDate({setDate, setVisible}: Props) {
     marked,
     setDay,
     handleFilterDate,
-    day,
+    currentDate,
   };
 }
