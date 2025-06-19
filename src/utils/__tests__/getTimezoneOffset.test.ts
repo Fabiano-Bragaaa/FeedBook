@@ -10,7 +10,7 @@ describe('getTimezoneOffset', () => {
     afterEach(() => {
       jest.useRealTimers();
     });
-    it('should be converted date from time zone America/Sao_Paulo', () => {
+    it('should convert the date from the America/Sao_Paulo time zone to UTC', () => {
 
       jest.setSystemTime(new Date(2023, 0, 1, 13, 40));
       const time = convertToUtc(new Date(), 'America/Sao_Paulo');
