@@ -1,14 +1,8 @@
-import {useState} from 'react';
 import {Image} from 'react-native';
 
 import {useAuthGoogleSignIn, useAuthSignIn} from '@domain';
 import {zodResolver} from '@hookform/resolvers/zod';
 import {google} from '@images';
-import {
-  GoogleSignin,
-  User,
-  isSuccessResponse,
-} from '@react-native-google-signin/google-signin';
 import {useToastService} from '@services';
 import {useForm} from 'react-hook-form';
 
