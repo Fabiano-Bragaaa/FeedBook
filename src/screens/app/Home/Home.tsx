@@ -39,7 +39,6 @@ export function Home({navigation}: AppTabScreenProps<'Home'>) {
   const {colors} = useAppTheme();
   const {userCredentials} = useAuthCredentials();
 
-
   const flatListRef = useRef<FlatList<CashFlow>>(null);
   useScrollToTop(flatListRef);
 
