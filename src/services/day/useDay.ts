@@ -7,7 +7,7 @@ type DateStore = {
   clearDay: () => void;
 };
 
-export function useDay():DateStore{
+export function useDay(): DateStore {
   return useDayZustand();
 }
 

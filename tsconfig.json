@@ -13,6 +13,7 @@
       "@utils": ["src/utils"],
       "@infra": ["src/infra"],
       "@images": ["src/assets/images"],
+      "test-utils": ["src/test/test-utils"],
     }
   }
 }

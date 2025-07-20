@@ -18,7 +18,8 @@ const {Navigator, Screen} = createNativeStackNavigator<AuthStackParamList>();
 
 export function AuthStack() {
   return (
-    <Navigator screenOptions={{headerShown: false, fullScreenGestureEnabled: false}}>
+    <Navigator
+      screenOptions={{headerShown: false, fullScreenGestureEnabled: false}}>
       <Screen name="Login" component={Login} />
       <Screen name="SignUp" component={SignUp} />
       <Screen name="Success" component={Success} />
